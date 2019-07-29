@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -208,6 +209,16 @@ namespace BI_coursework
             //Bind the listbox to the list.
         }
 
+        private void btnGetDates_Click(object sender, EventArgs e)
+        {
+            // Create A List To Store Dates In
+            List<string> Dates = new List<string>();
+            // Clear List Box
+            lstGetDates.Items.Clear();
 
+            // Create The Database String
+            string connectionString = Properties.Settings.Default.Data_set_1ConnectionString;
+
+        }
     }
 }
