@@ -219,6 +219,38 @@ namespace BI_coursework
             // Create The Database String
             string connectionString = Properties.Settings.Default.Data_set_1ConnectionString;
 
+            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            {
+                // Open The Connection
+                connection.Open();
+                OleDbDataReader reader = null;
+                // Run The Query
+                OleDbCommand getDates = new OleDbCommand(" SELECT [Order Date], [Ship Date] from SHeet1", connection);
+
+                // Read Query Results
+                reader = getDates.ExecuteReader();
+                // Loop To Retrieve All Results
+                while (reader.Read())
+                {
+                    // Column 1
+                    Dates.Add(reader[0].ToString());
+                    // Column 2
+                    Dates.Add(reader[1].ToString());
+                }
+
+            }
+
+            // Format Results
+            List<string> DatesFormatted = new List<string>();
+            // Remove Time - New List Looped Through Old - Splitting Data & Adding Back Only Dates
+            foreach(string date in Dates)
+            {
+                var dates = date.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                DatesFormatted.Add(dates[0]);
+            }
+
+            // Bind Formatted List To ListBox
+            lstGetDates.DataSource = DatesFormatted;
         }
     }
 }
