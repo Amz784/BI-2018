@@ -251,6 +251,13 @@ namespace BI_coursework
 
             // Bind Formatted List To ListBox
             lstGetDates.DataSource = DatesFormatted;
+
+            // Variables
+            Int32 year = 0;
+            Int32 month = 0;
+            Int32 day = 0;
+
+            Console.WriteLine(DatesFormatted[0].ToString());
         }
     }
 }
