@@ -253,11 +253,25 @@ namespace BI_coursework
             lstGetDates.DataSource = DatesFormatted;
 
             // Variables
-            Int32 year = 0;
-            Int32 month = 0;
-            Int32 day = 0;
+            string[] arrayDate = DatesFormatted[0].ToString().Split('/');
+            Int32 year = Convert.ToInt32(arrayDate[2]);
+            Int32 month = Convert.ToInt32(arrayDate[1]);
+            Int32 day = Convert.ToInt32(arrayDate[0]);
 
             Console.WriteLine(DatesFormatted[0].ToString());
+
+            DateTime myDate = new DateTime(year, month, day);
+            Console.WriteLine(" Day Of Week: " + myDate.DayOfWeek);
+
+            String dayOfWeek = myDate.DayOfWeek.ToString();
+            Int32 dayOfYear = myDate.DayOfYear;
+            String monthName = myDate.ToString("MMMM");
+            Int32 WeekNumber = dayOfYear / 7;
+            Boolean weekend = false;
+            if (dayOfWeek == "Saturday" || dayOfWeek == "Sunday") weekend = true;
+
+            // Page 8
+
         }
     }
 }
