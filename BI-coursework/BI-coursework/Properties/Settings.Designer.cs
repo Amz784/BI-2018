@@ -33,5 +33,16 @@ namespace BI_coursework.Properties {
                 return ((string)(this["Data_set_1ConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database\\Dest" +
+            "inationDatabase.mdf;Integrated Security=True")]
+        public string DestinationDatabaseConnectionString {
+            get {
+                return ((string)(this["DestinationDatabaseConnectionString"]));
+            }
+        }
     }
 }

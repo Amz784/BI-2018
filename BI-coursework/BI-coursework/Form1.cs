@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -243,7 +244,7 @@ namespace BI_coursework
             // Format Results
             List<string> DatesFormatted = new List<string>();
             // Remove Time - New List Looped Through Old - Splitting Data & Adding Back Only Dates
-            foreach(string date in Dates)
+            foreach (string date in Dates)
             {
                 var dates = date.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
                 DatesFormatted.Add(dates[0]);
@@ -251,6 +252,7 @@ namespace BI_coursework
 
             // Bind Formatted List To ListBox
             lstGetDates.DataSource = DatesFormatted;
+            splitDates(DatesFormatted[0]);
 
             // Variables
             string[] arrayDate = DatesFormatted[0].ToString().Split('/');
@@ -269,9 +271,63 @@ namespace BI_coursework
             Int32 WeekNumber = dayOfYear / 7;
             Boolean weekend = false;
             if (dayOfWeek == "Saturday" || dayOfWeek == "Sunday") weekend = true;
+        }
 
-            // Page 8
+        private void insertTimeDimension(string date, string dayName, Int32 dayNumber, string monthName, Int32 monthNumber, Int32 weekNumber, Int32 year, Boolean weekend, Int32 dayOfYear)
+        {
+            // Create A Connection To THe MDF File
+            string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
+
+            using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
+            {
+                // Open The SQL Connection
+                myConnection.Open();
+                // Check If The Date Exists In The Database - No Duplicating
+                SqlCommand command = new SqlCommand("SELECT id FROM Time Where date = @date", myConnection);
+                command.Parameters.Add(new SqlParameter("date", date));
+
+                // Create A Variable & Assign As False Default
+                Boolean exists = false;
+
+                // Run & Read Results
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    // If Rows Exists - Date Exists - Update The Var
+                    if (reader.HasRows) exists = true;     
+                }
+         
+                if(exists == false)
+                {
+                    SqlCommand insertCommand = new SqlCommand(
+                   " INSERT INTO Time (dayName, dayNumber, monthName, monthNumber, weekNumber, year, weekend, date, dayOfYear) " +
+                   " VALUES (@dayName, @dayNumber, @monthName, @monthNumber, @weekNumber, @year, @weekend, @date, @dayOfYear) ", myConnection);
+                    insertCommand.Parameters.Add(new SqlParameter("dayName", dayName));
+                    insertCommand.Parameters.Add(new SqlParameter("dayNumber", dayNumber));
+                    insertCommand.Parameters.Add(new SqlParameter("monthName", monthName));
+                    insertCommand.Parameters.Add(new SqlParameter("monthNumber", monthNumber));
+                    insertCommand.Parameters.Add(new SqlParameter("weekNumber", weekNumber));
+                    insertCommand.Parameters.Add(new SqlParameter("year", year));
+                    insertCommand.Parameters.Add(new SqlParameter("weekend", weekend));
+                    insertCommand.Parameters.Add(new SqlParameter("date", date));
+                    insertCommand.Parameters.Add(new SqlParameter("dayOfYear", dayOfYear));
+
+                    // Insert The Line
+                    int recordsAffected = insertCommand.ExecuteNonQuery();
+                    Console.WriteLine("Records Affected: " + recordsAffected);
+
+                }
+            }
+        }
+
+            private void splitDates (string rawDate)
+         {
+            // Split The Date Down & Assign It To Variable For Later Use
+            string[] arrayDate = rawDate.Split('/');
+            Int32 year = Convert.ToInt32(arrayDate[2]);
+            Int32 month = Convert.ToInt32(arrayDate[1]);
+            Int32 day = Convert.ToInt32(arrayDate[0]);
+         }
 
         }
     }
-}
+
