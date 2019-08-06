@@ -339,6 +339,13 @@ namespace BI_coursework
             Int32 day = Convert.ToInt32(arrayDate[0]);
          }
 
+        private void btnGetProducts_Click(object sender, EventArgs e)
+        {
+            // Create A List To Store Products In
+            List<string> Products = new List<string>();
+            // Clear Items
+            lstGetDates.Items.Clear();
         }
+    }
     }
 

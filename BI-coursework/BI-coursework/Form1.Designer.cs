@@ -30,14 +30,19 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.lstGetDates = new System.Windows.Forms.ListBox();
+            this.btnGetDates = new System.Windows.Forms.Button();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.btnGetDates = new System.Windows.Forms.Button();
-            this.lstGetDates = new System.Windows.Forms.ListBox();
+            this.btnGetProducts = new System.Windows.Forms.Button();
+            this.lstGetProducts = new System.Windows.Forms.ListBox();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.textBox6 = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -56,6 +61,11 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.textBox6);
+            this.tabPage1.Controls.Add(this.textBox5);
+            this.tabPage1.Controls.Add(this.textBox4);
+            this.tabPage1.Controls.Add(this.lstGetProducts);
+            this.tabPage1.Controls.Add(this.btnGetProducts);
             this.tabPage1.Controls.Add(this.lstGetDates);
             this.tabPage1.Controls.Add(this.btnGetDates);
             this.tabPage1.Controls.Add(this.textBox3);
@@ -68,6 +78,45 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "ETL";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // lstGetDates
+            // 
+            this.lstGetDates.FormattingEnabled = true;
+            this.lstGetDates.Location = new System.Drawing.Point(29, 183);
+            this.lstGetDates.Name = "lstGetDates";
+            this.lstGetDates.Size = new System.Drawing.Size(100, 95);
+            this.lstGetDates.TabIndex = 4;
+            // 
+            // btnGetDates
+            // 
+            this.btnGetDates.Location = new System.Drawing.Point(29, 144);
+            this.btnGetDates.Name = "btnGetDates";
+            this.btnGetDates.Size = new System.Drawing.Size(100, 23);
+            this.btnGetDates.TabIndex = 3;
+            this.btnGetDates.Text = "Get Dates";
+            this.btnGetDates.UseVisualStyleBackColor = true;
+            this.btnGetDates.Click += new System.EventHandler(this.btnGetDates_Click);
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(29, 90);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(100, 20);
+            this.textBox3.TabIndex = 2;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(29, 64);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(100, 20);
+            this.textBox2.TabIndex = 1;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(29, 38);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -98,44 +147,44 @@
             this.tabPage4.Text = "Dashboard 3";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // btnGetProducts
             // 
-            this.textBox1.Location = new System.Drawing.Point(29, 38);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 0;
+            this.btnGetProducts.Location = new System.Drawing.Point(152, 144);
+            this.btnGetProducts.Name = "btnGetProducts";
+            this.btnGetProducts.Size = new System.Drawing.Size(100, 23);
+            this.btnGetProducts.TabIndex = 5;
+            this.btnGetProducts.Text = "Get Products";
+            this.btnGetProducts.UseVisualStyleBackColor = true;
+            this.btnGetProducts.Click += new System.EventHandler(this.btnGetProducts_Click);
             // 
-            // textBox2
+            // lstGetProducts
             // 
-            this.textBox2.Location = new System.Drawing.Point(29, 64);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 1;
+            this.lstGetProducts.FormattingEnabled = true;
+            this.lstGetProducts.Location = new System.Drawing.Point(152, 183);
+            this.lstGetProducts.Name = "lstGetProducts";
+            this.lstGetProducts.Size = new System.Drawing.Size(100, 95);
+            this.lstGetProducts.TabIndex = 6;
             // 
-            // textBox3
+            // textBox4
             // 
-            this.textBox3.Location = new System.Drawing.Point(29, 90);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 2;
+            this.textBox4.Location = new System.Drawing.Point(152, 37);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(100, 20);
+            this.textBox4.TabIndex = 7;
             // 
-            // btnGetDates
+            // textBox5
             // 
-            this.btnGetDates.Location = new System.Drawing.Point(29, 144);
-            this.btnGetDates.Name = "btnGetDates";
-            this.btnGetDates.Size = new System.Drawing.Size(100, 23);
-            this.btnGetDates.TabIndex = 3;
-            this.btnGetDates.Text = "Get Dates";
-            this.btnGetDates.UseVisualStyleBackColor = true;
-            this.btnGetDates.Click += new System.EventHandler(this.btnGetDates_Click);
+            this.textBox5.Location = new System.Drawing.Point(152, 64);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(100, 20);
+            this.textBox5.TabIndex = 8;
             // 
-            // lstGetDates
+            // textBox6
             // 
-            this.lstGetDates.FormattingEnabled = true;
-            this.lstGetDates.Location = new System.Drawing.Point(29, 183);
-            this.lstGetDates.Name = "lstGetDates";
-            this.lstGetDates.Size = new System.Drawing.Size(100, 95);
-            this.lstGetDates.TabIndex = 4;
+            this.textBox6.Location = new System.Drawing.Point(152, 90);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(100, 20);
+            this.textBox6.TabIndex = 9;
             // 
             // Form1
             // 
@@ -164,5 +213,10 @@
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.ListBox lstGetProducts;
+        private System.Windows.Forms.Button btnGetProducts;
     }
 }
