@@ -252,6 +252,12 @@ namespace BI_coursework
 
             // Bind Formatted List To ListBox
             lstGetDates.DataSource = DatesFormatted;
+
+            // Split Dates & Insert
+            foreach(string date in DatesFormatted)
+            {
+                splitDates(date);
+            }
             splitDates(DatesFormatted[0]);
 
             // Variables
@@ -268,12 +274,17 @@ namespace BI_coursework
             String dayOfWeek = myDate.DayOfWeek.ToString();
             Int32 dayOfYear = myDate.DayOfYear;
             String monthName = myDate.ToString("MMMM");
-            Int32 WeekNumber = dayOfYear / 7;
+            Int32 weekNumber = dayOfYear / 7;
             Boolean weekend = false;
             if (dayOfWeek == "Saturday" || dayOfWeek == "Sunday") weekend = true;
+
+            // Convert To Database Friendly Format
+            string dbDate = myDate.ToString("M/dd/yyyy");
+
+            insertTimedimension(dbDate, dayOfWeek, day, monthName, month, weekNumber, year, weekend, dayOfYear);
         }
 
-        private void insertTimeDimension(string date, string dayName, Int32 dayNumber, string monthName, Int32 monthNumber, Int32 weekNumber, Int32 year, Boolean weekend, Int32 dayOfYear)
+        private void insertTimedimension(string date, string dayName, Int32 dayNumber, string monthName, Int32 monthNumber, Int32 weekNumber, Int32 year, Boolean weekend, Int32 dayOfYear)
         {
             // Create A Connection To THe MDF File
             string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
