@@ -345,6 +345,24 @@ namespace BI_coursework
             List<string> Products = new List<string>();
             // Clear Items
             lstGetDates.Items.Clear();
+
+            // Create Database String 
+            string connectionString = Properties.Settings.Default.Data_set_1ConnectionString;
+
+            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            {
+                connection.Open();
+                OleDbDataReader reader = null;
+                OleDbCommand getProducts = new OleDbCommand(" SELECT [Product ID], [Product Name] from Sheet1", connection);
+
+                reader = getProducts.ExecuteReader();
+                while (reader.Read())
+                {
+                    Products.Add(reader[0].ToString());
+                    Products.Add(reader[1].ToString());
+                }
+            }
+            lstGetDates.DataSource = Products;
         }
     }
     }
