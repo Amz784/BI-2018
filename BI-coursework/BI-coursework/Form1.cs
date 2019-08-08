@@ -77,12 +77,7 @@ namespace BI_coursework
 
         private void insertTimeDimension(string date, string dayName, int dayNumber, string monthName, int monthNumber, int weekNumber, int year, bool weekend, int dayOfYear)
         {
-            //Create a connection to the MDF file
-
-            //Build the query
-
-            //Insert the data
-
+           
         }
 
         private void insertProductDimension(string category, string subcategory, string name, string reference)
@@ -150,15 +145,42 @@ namespace BI_coursework
 
         private int GetDateId(string date)
         {
-            //Remove the timestamps
+            // Split Date
+            string[] arrayDate = date.Split('/');
+            Int32 year = Convert.ToInt32(arrayDate[2]);
+            Int32 month = Convert.ToInt32(arrayDate[1]);
+            Int32 day = Convert.ToInt32(arrayDate[0]);
 
-            //Split the clean date down and assign it to variables for later use.
+            DateTime myDate = new DateTime(year, month, day);
+            string dbDate = myDate.ToString("M/dd/yyyy");
 
-            //Create a connection to the MDF file
+            // Create A Connection TO MDF File
+            string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
 
-            //Run the command & read the results
+            using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
+            {
+                // Open The SQL Connection
+                myConnection.Open();
+                // Check If The Date Exists In The Database - No Duplicating
+                SqlCommand command = new SqlCommand("SELECT id FROM Time Where date = @date", myConnection);
+                command.Parameters.Add(new SqlParameter("date", date));
 
-            //return the details
+                // Create A Variable & Assign As False Default
+                Boolean exists = false;
+
+                // Run & Read Results
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    // If Rows Exists - Date Exists - Update The Var
+                    if (reader.HasRows)
+                    {
+                        exists = true;
+                        return Convert.ToInt32(reader["id"]);
+                    }
+                }
+
+            }
+
             return 0;
 
         }
@@ -283,6 +305,7 @@ namespace BI_coursework
 
             insertTimedimension(dbDate, dayOfWeek, day, monthName, month, weekNumber, year, weekend, dayOfYear);
         }
+   
 
         private void insertTimedimension(string date, string dayName, Int32 dayNumber, string monthName, Int32 monthNumber, Int32 weekNumber, Int32 year, Boolean weekend, Int32 dayOfYear)
         {
@@ -360,9 +383,27 @@ namespace BI_coursework
                 {
                     Products.Add(reader[0].ToString());
                     Products.Add(reader[1].ToString());
+
+                    string ProductId = reader[0].ToString();
+                    string ProductName = reader[1].ToString();
+                    string Category = reader[2].ToString();
+                    string SubCategory = reader[3].ToString();
                 }
             }
             lstGetProducts.DataSource = Products;
+        }
+
+        private void insertProductdimension(string ProductId, string ProductName, string Category, string SubCategory)
+        {
+            // Create A MDF Connection
+            string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
+
+            using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
+            {
+                // Open Connection
+                myConnection.Open();
+            }
+
         }
     }
     }
