@@ -385,12 +385,12 @@ namespace BI_coursework
                     Products.Add(reader[1].ToString());
 
                     string ProductId = reader[0].ToString();
-                    string ProductName = reader[1].ToString();
-                    string Category = reader[2].ToString();
-                    string SubCategory = reader[3].ToString();
+                    string ProductName = reader[1].ToString();               
                 }
+
             }
             lstGetProducts.DataSource = Products;
+    
         }
 
         private void insertProductdimension(string ProductId, string ProductName, string Category, string SubCategory)
@@ -402,6 +402,36 @@ namespace BI_coursework
             {
                 // Open Connection
                 myConnection.Open();
+                // Sql Command
+                SqlCommand command = new SqlCommand(" SELECT Id FROM Product WHERE ProductId = @ProductId", myConnection);
+                command.Parameters.Add(new SqlParameter("ProductId", ProductId));
+               
+
+                // Create A Variable & Assign It As False
+                bool exists = false;
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    // If There Are Rows - Name Exists
+                    if (reader.HasRows)
+                    {
+                        exists = true;
+                    }
+                }
+
+                if (exists == false)
+                {
+                    SqlCommand insertCommand = new SqlCommand(
+                    "INSERT INTO Product (ProductId, ProductName, Category, SubCategory)" + "VALUES (@ProductId, @ProductName, @Category, @SubCategory)", myConnection);
+                    insertCommand.Parameters.Add(new SqlParameter("ProductId", ProductId));
+                    insertCommand.Parameters.Add(new SqlParameter("ProductName", ProductName));
+                    insertCommand.Parameters.Add(new SqlParameter("Category", Category));
+                    insertCommand.Parameters.Add(new SqlParameter("SubCategory", SubCategory));
+
+                    // Insert The Line
+                    int recordsAffected = insertCommand.ExecuteNonQuery();
+                        
+                }
             }
 
         }
