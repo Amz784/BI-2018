@@ -145,7 +145,7 @@ namespace BI_coursework
         }
 
 
-        
+
 
 
         private int GetDateId(string date)
@@ -164,15 +164,30 @@ namespace BI_coursework
         }
         private int GetProductId(string reference)
         {
-            //Remove the timestamps
+            // Create A MDF Connection
+            string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
 
-            //Split the clean date down and assign it to variables for later use.
+            using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
+            {
+                // Open Connection
+                myConnection.Open();
+                // Sql Command
+                SqlCommand command = new SqlCommand(" SELECT Id FROM Product WHERE ProductID = @ProductID", myConnection);
+                //command.Parameters.Add(new SqlParameter("ProductID", ProductID));
 
-            //Create a connection to the MDF file
 
-            //Run the command & read the results
+                // Create A Variable & Assign It As False
+                bool exists = false;
 
-            //return the details
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    // If There Are Rows - Name Exists
+                    if (reader.HasRows)
+                    {
+                        return Convert.ToInt32(reader["ID"]);
+                    }
+                }
+            }
             return 0;
         }
 
@@ -254,7 +269,7 @@ namespace BI_coursework
             lstGetDates.DataSource = DatesFormatted;
 
             // Split Dates & Insert
-            foreach(string date in DatesFormatted)
+            foreach (string date in DatesFormatted)
             {
                 splitDates(date);
             }
@@ -304,10 +319,10 @@ namespace BI_coursework
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     // If Rows Exists - Date Exists - Update The Var
-                    if (reader.HasRows) exists = true;     
+                    if (reader.HasRows) exists = true;
                 }
-         
-                if(exists == false)
+
+                if (exists == false)
                 {
                     SqlCommand insertCommand = new SqlCommand(
                    " INSERT INTO Time (dayName, dayNumber, monthName, monthNumber, weekNumber, year, weekend, date, dayOfYear) " +
@@ -330,15 +345,71 @@ namespace BI_coursework
             }
         }
 
-            private void splitDates (string rawDate)
-         {
+        private void splitDates(string rawDate)
+        {
             // Split The Date Down & Assign It To Variable For Later Use
             string[] arrayDate = rawDate.Split('/');
             Int32 year = Convert.ToInt32(arrayDate[2]);
             Int32 month = Convert.ToInt32(arrayDate[1]);
             Int32 day = Convert.ToInt32(arrayDate[0]);
-         }
+        }
 
+        private void btnGetDatesDimension_Click(object sender, EventArgs e)
+        {
+            // Create A List
+            List<string> DestinationDates = new List<string>();
+
+            // Clear
+            lstGetDatesDimension.DataSource = null;
+            lstGetDatesDimension.Items.Clear();
+
+            // Create A Connection To The MDF File
+            string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
+
+            using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
+            {
+                // Open Connection
+                myConnection.Open();
+                // Check If Date Exists
+                SqlCommand command = new SqlCommand("SELECT id, dayName, dayNumber, monthName, monthNumber, weekNumber, year, " + " weekend, date, dayOfYear FROM Time", myConnection);
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            string id = reader["id"].ToString();
+                            string dayName = reader["dayName"].ToString();
+                            string dayNumber = reader["dayNumber"].ToString();
+                            string monthName = reader["monthName"].ToString();
+                            string monthNumber = reader["monthName"].ToString();
+                            string weekNumber = reader["weekNumber"].ToString();
+                            string year = reader["year"].ToString();
+                            string weekend = reader["weekend"].ToString();
+                            string date = reader["date"].ToString();
+                            string dayOfYear = reader["dayOfYear"].ToString();
+
+                            string text;
+                            text = "ID = " + id + ", Day Name = " + dayName + ", Day Number = " + dayNumber + ", Month Name" + monthName + ", Month Number" + monthNumber + ", Week Number" + weekNumber + ", Year" + year + ", Weekend" + weekend + ", Date" + date + ", Day Of Year" + dayOfYear;
+
+                            DestinationDates.Add(text);
+                        }
+
+                    }
+
+                    else
+                    {
+                        DestinationDates.Add("No Data Present In Dimension");
+                    }
+                    }
+                }
+                // Bind
+                lstGetDatesDimension.DataSource = DestinationDates;
+            }
+        
         }
     }
+
+
 
