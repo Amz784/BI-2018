@@ -186,15 +186,30 @@ namespace BI_coursework
         }
         private int GetProductId(string reference)
         {
-            //Remove the timestamps
+            // Create A MDF Connection
+            string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
 
-            //Split the clean date down and assign it to variables for later use.
+            using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
+            {
+                // Open Connection
+                myConnection.Open();
+                // Sql Command
+                SqlCommand command = new SqlCommand(" SELECT Id FROM Product WHERE ProductID = @ProductID", myConnection);
+                //command.Parameters.Add(new SqlParameter("ProductID", ProductID));
 
-            //Create a connection to the MDF file
 
-            //Run the command & read the results
+                // Create A Variable & Assign It As False
+                bool exists = false;
 
-            //return the details
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    // If There Are Rows - Name Exists
+                    if (reader.HasRows)
+                    {
+                        return Convert.ToInt32(reader["ID"]);
+                    }
+                }
+            }
             return 0;
         }
 
@@ -367,7 +382,7 @@ namespace BI_coursework
             // Create A List To Store Products In
             List<string> Products = new List<string>();
             // Clear Items
-            lstGetProducts.Items.Clear();
+            Products.Items.Clear();
 
             // Create Database String 
             string connectionString = Properties.Settings.Default.Data_set_1ConnectionString;
@@ -376,24 +391,30 @@ namespace BI_coursework
             {
                 connection.Open();
                 OleDbDataReader reader = null;
-                OleDbCommand getProducts = new OleDbCommand(" SELECT [Product ID], [Product Name] from Sheet1", connection);
+                OleDbCommand getProducts = new OleDbCommand(" SELECT [Product ID], [Product Name], Category, [Sub-Category] from Sheet1", connection);
 
                 reader = getProducts.ExecuteReader();
                 while (reader.Read())
                 {
                     Products.Add(reader[0].ToString());
                     Products.Add(reader[1].ToString());
+                    Products.Add(reader[2].ToString());
+                    Products.Add(reader[3].ToString());
 
                     string ProductId = reader[0].ToString();
-                    string ProductName = reader[1].ToString();               
+                    string ProductName = reader[1].ToString();
+                    string Category = reader[2].ToString();
+                    string SubCategory = reader[3].ToString();
+
                 }
 
             }
+
             lstGetProducts.DataSource = Products;
     
         }
 
-        private void insertProductdimension(string ProductId, string ProductName, string Category, string SubCategory)
+        private void insertProductdimension(string ProductID, string ProductName, string Category, string SubCategory)
         {
             // Create A MDF Connection
             string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
@@ -403,8 +424,8 @@ namespace BI_coursework
                 // Open Connection
                 myConnection.Open();
                 // Sql Command
-                SqlCommand command = new SqlCommand(" SELECT Id FROM Product WHERE ProductId = @ProductId", myConnection);
-                command.Parameters.Add(new SqlParameter("ProductId", ProductId));
+                SqlCommand command = new SqlCommand(" SELECT Id FROM Product WHERE ProductID = @ProductID", myConnection);
+                command.Parameters.Add(new SqlParameter("ProductID", ProductID));
                
 
                 // Create A Variable & Assign It As False
@@ -422,9 +443,9 @@ namespace BI_coursework
                 if (exists == false)
                 {
                     SqlCommand insertCommand = new SqlCommand(
-                    "INSERT INTO Product (ProductId, ProductName, Category, SubCategory)" + "VALUES (@ProductId, @ProductName, @Category, @SubCategory)", myConnection);
-                    insertCommand.Parameters.Add(new SqlParameter("ProductId", ProductId));
-                    insertCommand.Parameters.Add(new SqlParameter("ProductName", ProductName));
+                    "INSERT INTO Product (ProductId, ProductName, Category, SubCategory)" + "VALUES (@Product ID, @ProductName, @Category, @SubCategory)", myConnection);
+                    insertCommand.Parameters.Add(new SqlParameter("ProductId", ProductID));
+                    insertCommand.Parameters.Add(new SqlParameter("Name", Name));
                     insertCommand.Parameters.Add(new SqlParameter("Category", Category));
                     insertCommand.Parameters.Add(new SqlParameter("SubCategory", SubCategory));
 
@@ -434,6 +455,12 @@ namespace BI_coursework
                 }
             }
 
+        }
+
+        private void btnGetDatesDimension_Click(object sender, EventArgs e)
+        {
+            // Create A List To Data In 
+          
         }
     }
     }

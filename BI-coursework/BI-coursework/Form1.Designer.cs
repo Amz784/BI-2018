@@ -30,19 +30,15 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.lstGetProducts = new System.Windows.Forms.ListBox();
+            this.btnGetProducts = new System.Windows.Forms.Button();
             this.lstGetDates = new System.Windows.Forms.ListBox();
             this.btnGetDates = new System.Windows.Forms.Button();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.btnGetProducts = new System.Windows.Forms.Button();
-            this.lstGetProducts = new System.Windows.Forms.ListBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.btnGetDatesDimension = new System.Windows.Forms.Button();
+            this.lstGetDatesDimension = new System.Windows.Forms.ListBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -61,16 +57,12 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.textBox6);
-            this.tabPage1.Controls.Add(this.textBox5);
-            this.tabPage1.Controls.Add(this.textBox4);
+            this.tabPage1.Controls.Add(this.lstGetDatesDimension);
+            this.tabPage1.Controls.Add(this.btnGetDatesDimension);
             this.tabPage1.Controls.Add(this.lstGetProducts);
             this.tabPage1.Controls.Add(this.btnGetProducts);
             this.tabPage1.Controls.Add(this.lstGetDates);
             this.tabPage1.Controls.Add(this.btnGetDates);
-            this.tabPage1.Controls.Add(this.textBox3);
-            this.tabPage1.Controls.Add(this.textBox2);
-            this.tabPage1.Controls.Add(this.textBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -79,44 +71,41 @@
             this.tabPage1.Text = "ETL";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // lstGetProducts
+            // 
+            this.lstGetProducts.FormattingEnabled = true;
+            this.lstGetProducts.Location = new System.Drawing.Point(29, 202);
+            this.lstGetProducts.Name = "lstGetProducts";
+            this.lstGetProducts.Size = new System.Drawing.Size(100, 95);
+            this.lstGetProducts.TabIndex = 6;
+            // 
+            // btnGetProducts
+            // 
+            this.btnGetProducts.Location = new System.Drawing.Point(29, 154);
+            this.btnGetProducts.Name = "btnGetProducts";
+            this.btnGetProducts.Size = new System.Drawing.Size(100, 42);
+            this.btnGetProducts.TabIndex = 5;
+            this.btnGetProducts.Text = "Get Products From Source";
+            this.btnGetProducts.UseVisualStyleBackColor = true;
+            this.btnGetProducts.Click += new System.EventHandler(this.btnGetProducts_Click);
+            // 
             // lstGetDates
             // 
             this.lstGetDates.FormattingEnabled = true;
-            this.lstGetDates.Location = new System.Drawing.Point(29, 183);
+            this.lstGetDates.Location = new System.Drawing.Point(29, 53);
             this.lstGetDates.Name = "lstGetDates";
             this.lstGetDates.Size = new System.Drawing.Size(100, 95);
             this.lstGetDates.TabIndex = 4;
             // 
             // btnGetDates
             // 
-            this.btnGetDates.Location = new System.Drawing.Point(29, 144);
+            this.btnGetDates.Location = new System.Drawing.Point(29, 6);
             this.btnGetDates.Name = "btnGetDates";
-            this.btnGetDates.Size = new System.Drawing.Size(100, 23);
+            this.btnGetDates.Size = new System.Drawing.Size(100, 41);
             this.btnGetDates.TabIndex = 3;
-            this.btnGetDates.Text = "Get Dates";
+            this.btnGetDates.Text = "Get Dates From Source";
             this.btnGetDates.UseVisualStyleBackColor = true;
             this.btnGetDates.Click += new System.EventHandler(this.btnGetDates_Click);
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(29, 90);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 2;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(29, 64);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 1;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(29, 38);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -147,44 +136,23 @@
             this.tabPage4.Text = "Dashboard 3";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // btnGetProducts
+            // btnGetDatesDimension
             // 
-            this.btnGetProducts.Location = new System.Drawing.Point(152, 144);
-            this.btnGetProducts.Name = "btnGetProducts";
-            this.btnGetProducts.Size = new System.Drawing.Size(100, 23);
-            this.btnGetProducts.TabIndex = 5;
-            this.btnGetProducts.Text = "Get Products";
-            this.btnGetProducts.UseVisualStyleBackColor = true;
-            this.btnGetProducts.Click += new System.EventHandler(this.btnGetProducts_Click);
+            this.btnGetDatesDimension.Location = new System.Drawing.Point(227, 7);
+            this.btnGetDatesDimension.Name = "btnGetDatesDimension";
+            this.btnGetDatesDimension.Size = new System.Drawing.Size(94, 40);
+            this.btnGetDatesDimension.TabIndex = 7;
+            this.btnGetDatesDimension.Text = "Get Dates From Dimesion";
+            this.btnGetDatesDimension.UseVisualStyleBackColor = true;
+            this.btnGetDatesDimension.Click += new System.EventHandler(this.btnGetDatesDimension_Click);
             // 
-            // lstGetProducts
+            // lstGetDatesDimension
             // 
-            this.lstGetProducts.FormattingEnabled = true;
-            this.lstGetProducts.Location = new System.Drawing.Point(152, 183);
-            this.lstGetProducts.Name = "lstGetProducts";
-            this.lstGetProducts.Size = new System.Drawing.Size(100, 95);
-            this.lstGetProducts.TabIndex = 6;
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(152, 37);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
-            this.textBox4.TabIndex = 7;
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(152, 64);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(100, 20);
-            this.textBox5.TabIndex = 8;
-            // 
-            // textBox6
-            // 
-            this.textBox6.Location = new System.Drawing.Point(152, 90);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(100, 20);
-            this.textBox6.TabIndex = 9;
+            this.lstGetDatesDimension.FormattingEnabled = true;
+            this.lstGetDatesDimension.Location = new System.Drawing.Point(227, 53);
+            this.lstGetDatesDimension.Name = "lstGetDatesDimension";
+            this.lstGetDatesDimension.Size = new System.Drawing.Size(94, 95);
+            this.lstGetDatesDimension.TabIndex = 8;
             // 
             // Form1
             // 
@@ -196,7 +164,6 @@
             this.Text = "Form1";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -210,13 +177,9 @@
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.ListBox lstGetDates;
         private System.Windows.Forms.Button btnGetDates;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.ListBox lstGetProducts;
         private System.Windows.Forms.Button btnGetProducts;
+        private System.Windows.Forms.ListBox lstGetDatesDimension;
+        private System.Windows.Forms.Button btnGetDatesDimension;
     }
 }
