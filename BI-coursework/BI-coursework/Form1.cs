@@ -382,7 +382,7 @@ namespace BI_coursework
             // Create A List To Store Products In
             List<string> Products = new List<string>();
             // Clear Items
-            Products.Items.Clear();
+            //Products.Items.Clear();
 
             // Create Database String 
             string connectionString = Properties.Settings.Default.Data_set_1ConnectionString;
