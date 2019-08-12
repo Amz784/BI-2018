@@ -382,7 +382,7 @@ namespace BI_coursework
             // Create A List To Store Products In
             List<string> Products = new List<string>();
             // Clear Items
-            //Products.Items.Clear();
+            lstGetProducts.Items.Clear();
 
             // Create Database String 
             string connectionString = Properties.Settings.Default.Data_set_1ConnectionString;
@@ -401,12 +401,13 @@ namespace BI_coursework
                     Products.Add(reader[2].ToString());
                     Products.Add(reader[3].ToString());
 
-                    string ProductId = reader[0].ToString();
+                    string ProductID = reader[0].ToString();
                     string ProductName = reader[1].ToString();
                     string Category = reader[2].ToString();
                     string SubCategory = reader[3].ToString();
 
                 }
+                insertProductdimension(ProductID, ProductName, Category, SubCategory);
 
             }
 
@@ -426,6 +427,9 @@ namespace BI_coursework
                 // Sql Command
                 SqlCommand command = new SqlCommand(" SELECT Id FROM Product WHERE ProductID = @ProductID", myConnection);
                 command.Parameters.Add(new SqlParameter("ProductID", ProductID));
+                command.Parameters.Add(new SqlParameter("ProductName", ProductName));
+                command.Parameters.Add(new SqlParameter("Category", Category));
+                command.Parameters.Add(new SqlParameter("SubCategory", SubCategory));
                
 
                 // Create A Variable & Assign It As False
@@ -459,9 +463,103 @@ namespace BI_coursework
 
         private void btnGetDatesDimension_Click(object sender, EventArgs e)
         {
-            // Create A List To Data In 
-          
+            // Create A List
+            List<string> DestinationDates = new List<string>();
+
+            // Clear
+            lstGetDatesDimension.DataSource = null;
+            lstGetDatesDimension.Items.Clear();
+
+            // Create A Connection To The MDF File
+            string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
+
+            using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
+            {
+                // Open Connection
+                myConnection.Open();
+                // Check If Date Exists
+                SqlCommand command = new SqlCommand("SELECT id, dayName, dayNumber, monthName, monthNumber, weekNumber, year, " + " weekend, date, dayOfYear FROM Time", myConnection);
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            string id = reader["id"].ToString();
+                            string dayName = reader["dayName"].ToString();
+                            string dayNumber = reader["dayNumber"].ToString();
+                            string monthName = reader["monthName"].ToString();
+                            string monthNumber = reader["monthName"].ToString();
+                            string weekNumber = reader["weekNumber"].ToString();
+                            string year = reader["year"].ToString();
+                            string weekend = reader["weekend"].ToString();
+                            string date = reader["date"].ToString();
+                            string dayOfYear = reader["dayOfYear"].ToString();
+
+                            string text;
+                            text = "ID = " + id + ", Day Name = " + dayName + ", Day Number = " + dayNumber + ", Month Name" + monthName + ", Month Number" + monthNumber + ", Week Number" + weekNumber + ", Year" + year + ", Weekend" + weekend + ", Date" + date + ", Day Of Year" + dayOfYear;
+
+                            DestinationDates.Add(text);
+                        }
+
+                    }
+
+                    else
+                    {
+                        DestinationDates.Add("No Data Present In Dimension");
+                    }
+                }
+            }
+            // Bind
+            lstGetDatesDimension.DataSource = DestinationDates;
+        }
+
+        private void btnGetProductsDimension_Click(object sender, EventArgs e)
+        {
+            // Create A List
+            List<string> DestinationProducts = new List<string>();
+            // Clear
+            lstGetProductsDimension.DataSource = null;
+            lstGetDatesDimension.Items.Clear();
+
+            // Create A Connection To MDF File
+            string connectionStringDatabase = Properties.Settings.Default.DestinationDatabaseConnectionString;
+
+            using (SqlConnection myConnection = new SqlConnection(connectionStringDatabase))
+            {
+                // Open The Connection
+                myConnection.Open();
+                // Check If The Product Exists
+                SqlCommand command = new SqlCommand(" SELECT ProductId, ProductName, Category, SubCategory FROM Product", myConnection);
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if(reader.HasRows)
+                    {
+                        while(reader.Read())
+                        {
+                            string ProductId = reader["ProductId"].ToString();
+                            string ProductName = reader["ProductName"].ToString();
+                            string Category = reader["Category"].ToString();
+                            string SubCategory = reader["SubCategory"].ToString();
+
+                            string text;
+                            text = "ProductId = " + ProductId + ", ProductName =" + ProductName + ", Category =" + Category + ", SubCategory =" + SubCategory;
+                            DestinationProducts.Add(text);
+                        }
+                    }
+                    else
+                    {
+                        DestinationProducts.Add("No Data Present In Dimension");
+                    }
+                }
+
+                // Bind
+                lstGetProductsDimension.DataSource = DestinationProducts;
+            }
         }
     }
-    }
+}
+
 
