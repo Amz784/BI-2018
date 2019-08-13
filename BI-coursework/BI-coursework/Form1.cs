@@ -406,8 +406,10 @@ namespace BI_coursework
                     string Category = reader[2].ToString();
                     string SubCategory = reader[3].ToString();
 
+                    insertProductdimension(ProductID, ProductName, Category, SubCategory);
+
                 }
-                insertProductdimension(ProductID, ProductName, Category, SubCategory);
+                connection.Close();
 
             }
 
@@ -447,7 +449,7 @@ namespace BI_coursework
                 if (exists == false)
                 {
                     SqlCommand insertCommand = new SqlCommand(
-                    "INSERT INTO Product (ProductId, ProductName, Category, SubCategory)" + "VALUES (@Product ID, @ProductName, @Category, @SubCategory)", myConnection);
+                    "INSERT INTO Product (ProductID, ProductName, Category, SubCategory)" + "VALUES (@ProductID, @ProductName, @Category, @SubCategory)", myConnection);
                     insertCommand.Parameters.Add(new SqlParameter("ProductId", ProductID));
                     insertCommand.Parameters.Add(new SqlParameter("Name", Name));
                     insertCommand.Parameters.Add(new SqlParameter("Category", Category));
