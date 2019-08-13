@@ -398,17 +398,15 @@ namespace BI_coursework
                 {
                     Products.Add(reader[0].ToString());
                     Products.Add(reader[1].ToString());
-                    Products.Add(reader[2].ToString());
-                    Products.Add(reader[3].ToString());
+                    
 
                     string ProductID = reader[0].ToString();
                     string ProductName = reader[1].ToString();
-                    string Category = reader[2].ToString();
-                    string SubCategory = reader[3].ToString();
-
-                    insertProductdimension(ProductID, ProductName, Category, SubCategory);
+                   
 
                 }
+
+             
                 connection.Close();
 
             }
@@ -417,7 +415,7 @@ namespace BI_coursework
     
         }
 
-        private void insertProductdimension(string ProductID, string ProductName, string Category, string SubCategory)
+        private void insertProductdimension(string Name, string Reference, string Category, string SubCategory)
         {
             // Create A MDF Connection
             string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
@@ -427,12 +425,12 @@ namespace BI_coursework
                 // Open Connection
                 myConnection.Open();
                 // Sql Command
-                SqlCommand command = new SqlCommand(" SELECT Id FROM Product WHERE ProductID = @ProductID", myConnection);
-                command.Parameters.Add(new SqlParameter("ProductID", ProductID));
-                command.Parameters.Add(new SqlParameter("ProductName", ProductName));
+                SqlCommand command = new SqlCommand(" SELECT Id FROM Product WHERE name = @name", myConnection);
+                command.Parameters.Add(new SqlParameter("Name", Name));
+                command.Parameters.Add(new SqlParameter("Reference", Reference));
                 command.Parameters.Add(new SqlParameter("Category", Category));
                 command.Parameters.Add(new SqlParameter("SubCategory", SubCategory));
-               
+                
 
                 // Create A Variable & Assign It As False
                 bool exists = false;
@@ -449,11 +447,12 @@ namespace BI_coursework
                 if (exists == false)
                 {
                     SqlCommand insertCommand = new SqlCommand(
-                    "INSERT INTO Product (ProductID, ProductName, Category, SubCategory)" + "VALUES (@ProductID, @ProductName, @Category, @SubCategory)", myConnection);
-                    insertCommand.Parameters.Add(new SqlParameter("ProductId", ProductID));
+                    "INSERT INTO Product (Name, Reference, Category, SubCategory)" + "VALUES (@name, @reference, @category, @subcategory)", myConnection);
                     insertCommand.Parameters.Add(new SqlParameter("Name", Name));
+                    insertCommand.Parameters.Add(new SqlParameter("Reference", Reference));
                     insertCommand.Parameters.Add(new SqlParameter("Category", Category));
                     insertCommand.Parameters.Add(new SqlParameter("SubCategory", SubCategory));
+                   
 
                     // Insert The Line
                     int recordsAffected = insertCommand.ExecuteNonQuery();
@@ -533,7 +532,7 @@ namespace BI_coursework
                 // Open The Connection
                 myConnection.Open();
                 // Check If The Product Exists
-                SqlCommand command = new SqlCommand(" SELECT ProductId, ProductName, Category, SubCategory FROM Product", myConnection);
+                SqlCommand command = new SqlCommand(" SELECT Name, Reference, Category, SubCategory FROM Product", myConnection);
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
@@ -541,13 +540,13 @@ namespace BI_coursework
                     {
                         while(reader.Read())
                         {
-                            string ProductId = reader["ProductId"].ToString();
-                            string ProductName = reader["ProductName"].ToString();
+                            string ProductId = reader["Name"].ToString();
+                            string ProductName = reader["Reference"].ToString();
                             string Category = reader["Category"].ToString();
                             string SubCategory = reader["SubCategory"].ToString();
 
                             string text;
-                            text = "ProductId = " + ProductId + ", ProductName =" + ProductName + ", Category =" + Category + ", SubCategory =" + SubCategory;
+                            text = "Name = " + Name + ", ProductName =" + Name + ", Category =" + Category + ", SubCategory =" + SubCategory;
                             DestinationProducts.Add(text);
                         }
                     }
