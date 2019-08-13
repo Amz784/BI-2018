@@ -194,7 +194,7 @@ namespace BI_coursework
                 // Open Connection
                 myConnection.Open();
                 // Sql Command
-                SqlCommand command = new SqlCommand(" SELECT Id FROM Product WHERE ProductID = @ProductID", myConnection);
+                SqlCommand command = new SqlCommand(" SELECT Id FROM Product WHERE name = @name", myConnection);
                 //command.Parameters.Add(new SqlParameter("ProductID", ProductID));
 
 
@@ -206,6 +206,7 @@ namespace BI_coursework
                     // If There Are Rows - Name Exists
                     if (reader.HasRows)
                     {
+                        exists = true;
                         return Convert.ToInt32(reader["ID"]);
                     }
                 }
@@ -398,20 +399,25 @@ namespace BI_coursework
                 {
                     Products.Add(reader[0].ToString());
                     Products.Add(reader[1].ToString());
+                    Products.Add(reader[2].ToString());
+                    Products.Add(reader[3].ToString());
                     
 
-                    string ProductID = reader[0].ToString();
-                    string ProductName = reader[1].ToString();
-                   
+                    string Name = reader[0].ToString();
+                    string Reference = reader[1].ToString();
+                    string Category = reader[2].ToString();
+                    string SubCategory = reader[3].ToString();
+                    insertProductdimension(Name, Reference, Category, SubCategory);
 
                 }
 
-             
-                connection.Close();
+                
+
 
             }
 
             lstGetProducts.DataSource = Products;
+            
     
         }
 
