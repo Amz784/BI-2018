@@ -145,7 +145,7 @@ namespace BI_coursework
         }
 
 
-        
+
 
 
         private int GetDateId(string date)
@@ -254,7 +254,7 @@ namespace BI_coursework
             lstGetDates.DataSource = DatesFormatted;
 
             // Split Dates & Insert
-            foreach(string date in DatesFormatted)
+            foreach (string date in DatesFormatted)
             {
                 splitDates(date);
             }
@@ -304,10 +304,10 @@ namespace BI_coursework
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     // If Rows Exists - Date Exists - Update The Var
-                    if (reader.HasRows) exists = true;     
+                    if (reader.HasRows) exists = true;
                 }
-         
-                if(exists == false)
+
+                if (exists == false)
                 {
                     SqlCommand insertCommand = new SqlCommand(
                    " INSERT INTO Time (dayName, dayNumber, monthName, monthNumber, weekNumber, year, weekend, date, dayOfYear) " +
@@ -330,20 +330,21 @@ namespace BI_coursework
             }
         }
 
-            private void splitDates (string rawDate)
-         {
+        private void splitDates(string rawDate)
+        {
             // Split The Date Down & Assign It To Variable For Later Use
             string[] arrayDate = rawDate.Split('/');
             Int32 year = Convert.ToInt32(arrayDate[2]);
             Int32 month = Convert.ToInt32(arrayDate[1]);
             Int32 day = Convert.ToInt32(arrayDate[0]);
-         }
+        }
 
         private void btnGetCustomers_Click(object sender, EventArgs e)
         {
             // Make A List
             List<string> Customers = new List<string>();
             // Clear 
+            lstGetCustomers.DataSource = null;
             lstGetCustomers.Items.Clear();
 
             // Create A Connection To MDF File
@@ -354,16 +355,83 @@ namespace BI_coursework
                 // Open The Connection
                 connection.Open();
                 OleDbDataReader reader = null;
-                OleDbCommand getCustomers = new OleDbCommand("SELECT [Customer ID], [Customer Name] from Sheet1", connection);
+                OleDbCommand getCustomers = new OleDbCommand("SELECT [Customer ID], [Customer Name], Country, City, State, [Postal Code], Region from Sheet1", connection);
 
                 reader = getCustomers.ExecuteReader();
                 while (reader.Read())
                 {
                     Customers.Add(reader[0].ToString());
                     Customers.Add(reader[1].ToString());
+                    Customers.Add(reader[2].ToString());
+                    Customers.Add(reader[3].ToString());
+                    Customers.Add(reader[4].ToString());
+                    Customers.Add(reader[5].ToString());
+                    Customers.Add(reader[6].ToString());
+                    
+                }
+            }
+            // Bind 
+            lstGetCustomers.DataSource = Customers;
+
+            foreach(string customer in Customers)
+            {
+                splitCustomers(customer);
+            }
+          
+
+        }
+            private void splitCustomers(string customer)
+        {
+            // Create An Array
+            string[] arrayCustomer = customer.Split(',');
+            string CustomerID = Convert.ToString(arrayCustomer[0]);
+            string name = Convert.ToString(arrayCustomer[1]);
+            string country = Convert.ToString(arrayCustomer[2]);
+            string city = Convert.ToString(arrayCustomer[3]);
+            string state = Convert.ToString(arrayCustomer[4]);
+            string postalCode = Convert.ToString(arrayCustomer[5]);
+            string region = Convert.ToString(arrayCustomer[6]);
+            string reference = Convert.ToString(arrayCustomer[7]);
+
+            insertCustomerdimension(CustomerID, name, country, city, state, postalCode, region, reference);
+        }
+        
+
+        private void insertCustomerdimension(string CustomerID, string name, string country, string city, string state, string postalCode, string region, string reference)
+        {
+            string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
+            using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
+            {
+                // Open The SQL Connection
+                myConnection.Open();
+                // Check Data Exists
+                SqlCommand command = new SqlCommand("SELECT id FROM Customer where name = @name", myConnection);
+                command.Parameters.Add(new SqlParameter("name", name));
+                // Create A Variable
+                Boolean exists = false;
+                // Run
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    // If There Are Rows
+                    if (reader.HasRows) exists = true;
+                }
+                if (exists == false)
+                {
+                    SqlCommand insertCommand = new SqlCommand(" INSERT INTO Customer (CustomerID, name, country, city, state, postalCode, region, reference) " + " VALUES(@CustomerID, @name, @country, @city, @state, @postalCode, @region, @reference)", myConnection);
+                    insertCommand.Parameters.Add(new SqlParameter("CustomerID", CustomerID));
+                    insertCommand.Parameters.Add(new SqlParameter("name", name));
+                    insertCommand.Parameters.Add(new SqlParameter("country", country));
+                    insertCommand.Parameters.Add(new SqlParameter("city", city));
+                    insertCommand.Parameters.Add(new SqlParameter("state", state));
+                    insertCommand.Parameters.Add(new SqlParameter("postalCode", postalCode));
+                    insertCommand.Parameters.Add(new SqlParameter("region", region));
+                    insertCommand.Parameters.Add(new SqlParameter("reference", reference));
+
+                    int recordsAffected = insertCommand.ExecuteNonQuery();
                 }
             }
         }
     }
-    }
+}
+  
 
