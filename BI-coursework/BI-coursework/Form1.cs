@@ -226,7 +226,7 @@ namespace BI_coursework
                 connection.Open();
                 OleDbDataReader reader = null;
                 // Run The Query
-                OleDbCommand getDates = new OleDbCommand(" SELECT [Order Date], [Ship Date] from SHeet1", connection);
+                OleDbCommand getDates = new OleDbCommand(" SELECT [Order Date], [Ship Date] from Sheet1", connection);
 
                 // Read Query Results
                 reader = getDates.ExecuteReader();
@@ -339,6 +339,31 @@ namespace BI_coursework
             Int32 day = Convert.ToInt32(arrayDate[0]);
          }
 
+        private void btnGetCustomers_Click(object sender, EventArgs e)
+        {
+            // Make A List
+            List<string> Customers = new List<string>();
+            // Clear 
+            lstGetCustomers.Items.Clear();
+
+            // Create A Connection To MDF File
+            string connectionString = Properties.Settings.Default.Data_set_1ConnectionString;
+
+            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            {
+                // Open The Connection
+                connection.Open();
+                OleDbDataReader reader = null;
+                OleDbCommand getCustomers = new OleDbCommand("SELECT [Customer ID], [Customer Name] from Sheet1", connection);
+
+                reader = getCustomers.ExecuteReader();
+                while (reader.Read())
+                {
+                    Customers.Add(reader[0].ToString());
+                    Customers.Add(reader[1].ToString());
+                }
+            }
         }
+    }
     }
 
