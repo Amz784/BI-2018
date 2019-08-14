@@ -74,21 +74,6 @@ namespace BI_coursework
             //Add data to list
         }
 
-
-        private void insertTimeDimension(string date, string dayName, int dayNumber, string monthName, int monthNumber, int weekNumber, int year, bool weekend, int dayOfYear)
-        {
-           
-        }
-
-        private void insertProductDimension(string category, string subcategory, string name, string reference)
-        {
-            //Create a connection to the MDF file
-
-            //Build the query
-
-            //Insert the data
-        }
-
         private void insertCustomerDimension(string name, string country, string city, string state, string postCode, string region, string reference)
         {
             //Create a connection to the MDF file
@@ -253,6 +238,7 @@ namespace BI_coursework
             // Create A List To Store Dates In
             List<string> Dates = new List<string>();
             // Clear List Box
+            lstGetDates.DataSource = null;
             lstGetDates.Items.Clear();
 
             // Create The Database String
@@ -392,7 +378,7 @@ namespace BI_coursework
             {
                 connection.Open();
                 OleDbDataReader reader = null;
-                OleDbCommand getProducts = new OleDbCommand(" SELECT [Product ID], [Product Name], Category, [Sub-Category] from Sheet1", connection);
+                OleDbCommand getProducts = new OleDbCommand("SELECT [Product ID], Category, [Sub-Category], [Product Name] from Sheet1", connection);
 
                 reader = getProducts.ExecuteReader();
                 while (reader.Read())
@@ -401,18 +387,15 @@ namespace BI_coursework
                     Products.Add(reader[1].ToString());
                     Products.Add(reader[2].ToString());
                     Products.Add(reader[3].ToString());
-                    
+                   
+                    string Category = reader[1].ToString();
+                    string SubCategory = reader[2].ToString();
+                    string Name = reader[3].ToString();
+                    string Reference = reader[0].ToString();
 
-                    string Name = reader[0].ToString();
-                    string Reference = reader[1].ToString();
-                    string Category = reader[2].ToString();
-                    string SubCategory = reader[3].ToString();
-                    insertProductdimension(Name, Reference, Category, SubCategory);
+                    insertProductdimension(Category, SubCategory, Name, Reference);
 
                 }
-
-                
-
 
             }
 
@@ -421,7 +404,7 @@ namespace BI_coursework
     
         }
 
-        private void insertProductdimension(string Name, string Reference, string Category, string SubCategory)
+        private void insertProductdimension(string Category, string SubCategory, string Name, string Reference)
         {
             // Create A MDF Connection
             string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
@@ -432,11 +415,11 @@ namespace BI_coursework
                 myConnection.Open();
                 // Sql Command
                 SqlCommand command = new SqlCommand(" SELECT Id FROM Product WHERE name = @name", myConnection);
-                command.Parameters.Add(new SqlParameter("Name", Name));
-                command.Parameters.Add(new SqlParameter("Reference", Reference));
                 command.Parameters.Add(new SqlParameter("Category", Category));
                 command.Parameters.Add(new SqlParameter("SubCategory", SubCategory));
-                
+                command.Parameters.Add(new SqlParameter("Name", Name));
+                command.Parameters.Add(new SqlParameter("Reference", Reference));
+
 
                 // Create A Variable & Assign It As False
                 bool exists = false;
@@ -453,15 +436,17 @@ namespace BI_coursework
                 if (exists == false)
                 {
                     SqlCommand insertCommand = new SqlCommand(
-                    "INSERT INTO Product (Name, Reference, Category, SubCategory)" + "VALUES (@name, @reference, @category, @subcategory)", myConnection);
-                    insertCommand.Parameters.Add(new SqlParameter("Name", Name));
-                    insertCommand.Parameters.Add(new SqlParameter("Reference", Reference));
+                    "INSERT INTO Product (Category, SubCategory, Name, Reference)" +
+                    "VALUES (@category, @subcategory, @name, @reference)", myConnection);
                     insertCommand.Parameters.Add(new SqlParameter("Category", Category));
                     insertCommand.Parameters.Add(new SqlParameter("SubCategory", SubCategory));
-                   
+                    insertCommand.Parameters.Add(new SqlParameter("Name", Name));
+                    insertCommand.Parameters.Add(new SqlParameter("Reference", Reference));
+
 
                     // Insert The Line
                     int recordsAffected = insertCommand.ExecuteNonQuery();
+                    Console.WriteLine("Records Affected: " + recordsAffected);
                         
                 }
             }
@@ -485,7 +470,8 @@ namespace BI_coursework
                 // Open Connection
                 myConnection.Open();
                 // Check If Date Exists
-                SqlCommand command = new SqlCommand("SELECT id, dayName, dayNumber, monthName, monthNumber, weekNumber, year, " + " weekend, date, dayOfYear FROM Time", myConnection);
+                SqlCommand command = new SqlCommand("SELECT id, dayName, dayNumber, monthName, monthNumber, weekNumber, year, " + 
+                    " weekend, date, dayOfYear FROM Time", myConnection);
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
@@ -493,6 +479,7 @@ namespace BI_coursework
                     {
                         while (reader.Read())
                         {
+                            // Listbox To Show
                             string id = reader["id"].ToString();
                             string dayName = reader["dayName"].ToString();
                             string dayNumber = reader["dayNumber"].ToString();
@@ -505,7 +492,7 @@ namespace BI_coursework
                             string dayOfYear = reader["dayOfYear"].ToString();
 
                             string text;
-                            text = "ID = " + id + ", Day Name = " + dayName + ", Day Number = " + dayNumber + ", Month Name" + monthName + ", Month Number" + monthNumber + ", Week Number" + weekNumber + ", Year" + year + ", Weekend" + weekend + ", Date" + date + ", Day Of Year" + dayOfYear;
+                            text = "ID = " + id + ", Day Name = " + dayName + ", Day Number = " + dayNumber + ", Month Name = " + monthName + ", Month Number = " + monthNumber + ", Week Number = " + weekNumber + ", Year = " + year + ", Weekend = " + weekend + ", Date = " + date + ", Day Of Year = " + dayOfYear;
 
                             DestinationDates.Add(text);
                         }
@@ -528,7 +515,7 @@ namespace BI_coursework
             List<string> DestinationProducts = new List<string>();
             // Clear
             lstGetProductsDimension.DataSource = null;
-            lstGetDatesDimension.Items.Clear();
+            lstGetProductsDimension.Items.Clear();
 
             // Create A Connection To MDF File
             string connectionStringDatabase = Properties.Settings.Default.DestinationDatabaseConnectionString;
@@ -538,7 +525,7 @@ namespace BI_coursework
                 // Open The Connection
                 myConnection.Open();
                 // Check If The Product Exists
-                SqlCommand command = new SqlCommand(" SELECT Name, Reference, Category, SubCategory FROM Product", myConnection);
+                SqlCommand command = new SqlCommand("SELECT Category, SubCategory, Name, Reference FROM Product", myConnection);
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
@@ -546,13 +533,13 @@ namespace BI_coursework
                     {
                         while(reader.Read())
                         {
-                            string ProductId = reader["Name"].ToString();
-                            string ProductName = reader["Reference"].ToString();
                             string Category = reader["Category"].ToString();
                             string SubCategory = reader["SubCategory"].ToString();
+                            string ProductName = reader["Name"].ToString();
+                            string ProductId = reader["Reference"].ToString();
 
                             string text;
-                            text = "Name = " + Name + ", ProductName =" + Name + ", Category =" + Category + ", SubCategory =" + SubCategory;
+                            text = "Category = " + Category + ", SubCategory = " + SubCategory + ", Name = " + ProductName + ", Reference = " + ProductId;
                             DestinationProducts.Add(text);
                         }
                     }
@@ -564,6 +551,29 @@ namespace BI_coursework
 
                 // Bind
                 lstGetProductsDimension.DataSource = DestinationProducts;
+            }
+        }
+
+        private void btnBuildFactTable_Click(object sender, EventArgs e)
+        {
+            // Create The Database String
+            string connectionString = Properties.Settings.Default.Data_set_1ConnectionString;
+
+            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            {
+                // Open Connection
+                connection.Open();
+                OleDbDataReader reader = null;
+                OleDbCommand getDates = new OleDbCommand("SELECT [Row ID], [Order ID], [Order Date], [Ship Date], " +
+                " [Ship Mode], [Customer ID], [Cusomer Name], Segment, Country, City, State, [Postal Code], [Product ID], " +
+                " Region, Category, [Sub-Category], [ProductName], Sales, Quantity, Profit, Discount FROM Sheet1", connection);
+
+                reader = getDates.ExecuteReader();
+                while (reader.Read())
+                {
+                    Decimal Sales = Convert.ToDecimal(reader["Sales"]);
+                    Int32 Quantity = Convert.ToInt32(reader["Quantity"]);
+                }
             }
         }
     }
