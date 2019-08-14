@@ -30,6 +30,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnBuildFactTable = new System.Windows.Forms.Button();
             this.lstGetProductsDimension = new System.Windows.Forms.ListBox();
             this.btnGetProductsDimension = new System.Windows.Forms.Button();
             this.lstGetDatesDimension = new System.Windows.Forms.ListBox();
@@ -41,7 +42,8 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.btnBuildFactTable = new System.Windows.Forms.Button();
+            this.btnGetFromFactTable = new System.Windows.Forms.Button();
+            this.lstGetFromFactTable = new System.Windows.Forms.ListBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -60,6 +62,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.lstGetFromFactTable);
+            this.tabPage1.Controls.Add(this.btnGetFromFactTable);
             this.tabPage1.Controls.Add(this.btnBuildFactTable);
             this.tabPage1.Controls.Add(this.lstGetProductsDimension);
             this.tabPage1.Controls.Add(this.btnGetProductsDimension);
@@ -76,6 +80,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "ETL";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnBuildFactTable
+            // 
+            this.btnBuildFactTable.Location = new System.Drawing.Point(524, 7);
+            this.btnBuildFactTable.Name = "btnBuildFactTable";
+            this.btnBuildFactTable.Size = new System.Drawing.Size(120, 40);
+            this.btnBuildFactTable.TabIndex = 11;
+            this.btnBuildFactTable.Text = "Build Fact Table";
+            this.btnBuildFactTable.UseVisualStyleBackColor = true;
+            this.btnBuildFactTable.Click += new System.EventHandler(this.btnBuildFactTable_Click);
             // 
             // lstGetProductsDimension
             // 
@@ -180,15 +194,23 @@
             this.tabPage4.Text = "Dashboard 3";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // btnBuildFactTable
+            // btnGetFromFactTable
             // 
-            this.btnBuildFactTable.Location = new System.Drawing.Point(524, 7);
-            this.btnBuildFactTable.Name = "btnBuildFactTable";
-            this.btnBuildFactTable.Size = new System.Drawing.Size(94, 40);
-            this.btnBuildFactTable.TabIndex = 11;
-            this.btnBuildFactTable.Text = "Build Fact Table";
-            this.btnBuildFactTable.UseVisualStyleBackColor = true;
-            this.btnBuildFactTable.Click += new System.EventHandler(this.btnBuildFactTable_Click);
+            this.btnGetFromFactTable.Location = new System.Drawing.Point(524, 53);
+            this.btnGetFromFactTable.Name = "btnGetFromFactTable";
+            this.btnGetFromFactTable.Size = new System.Drawing.Size(120, 37);
+            this.btnGetFromFactTable.TabIndex = 12;
+            this.btnGetFromFactTable.Text = "Get From Fact Table";
+            this.btnGetFromFactTable.UseVisualStyleBackColor = true;
+            // 
+            // lstGetFromFactTable
+            // 
+            this.lstGetFromFactTable.FormattingEnabled = true;
+            this.lstGetFromFactTable.HorizontalScrollbar = true;
+            this.lstGetFromFactTable.Location = new System.Drawing.Point(524, 101);
+            this.lstGetFromFactTable.Name = "lstGetFromFactTable";
+            this.lstGetFromFactTable.Size = new System.Drawing.Size(120, 199);
+            this.lstGetFromFactTable.TabIndex = 13;
             // 
             // Form1
             // 
@@ -220,5 +242,7 @@
         private System.Windows.Forms.ListBox lstGetProductsDimension;
         private System.Windows.Forms.Button btnGetProductsDimension;
         private System.Windows.Forms.Button btnBuildFactTable;
+        private System.Windows.Forms.ListBox lstGetFromFactTable;
+        private System.Windows.Forms.Button btnGetFromFactTable;
     }
 }

@@ -60,6 +60,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSet2DataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataSet2DataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Data_set_1DataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -90,6 +95,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="DataSet2DataSet.xsc">
+      <DependentUpon>DataSet2DataSet.xsd</DependentUpon>
+    </None>
+    <None Include="DataSet2DataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DataSet2DataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DataSet2DataSet.xss">
+      <DependentUpon>DataSet2DataSet.xsd</DependentUpon>
+    </None>
     <None Include="Data_set_1DataSet.xsc">
       <DependentUpon>Data_set_1DataSet.xsd</DependentUpon>
     </None>
