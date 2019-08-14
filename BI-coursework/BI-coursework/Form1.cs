@@ -215,11 +215,32 @@ namespace BI_coursework
         }
         private void insertIntoFactTable(int productId, int timeId, int customerId, double value, double discount, double profit, double quantity)
         {
-            //Create a connection to the MDF file
+            // Create A Connection To MDF File
+            string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
 
-            //Build the query
+            using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
+            {
+                // Open The SQL Connection
+                myConnection.Open();
+                // Check If The Date Exists In The Database - No Duplicating
+                SqlCommand command = new SqlCommand("SELECT id FROM Time Where value = @value", myConnection);
+                command.Parameters.Add(new SqlParameter("value", value));
 
-            //Insert the data
+                // Create A Variable & Assign As False Default
+                Boolean exists = false;
+
+                // Run & Read Results
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    // If Rows Exists - Date Exists - Update The Var
+                    if (reader.HasRows) exists = true;
+                }
+
+                if (exists == false)
+                {
+                    SqlCommand insertCommand = new SqlCommand("INSERT INTO FactTable")
+                }
+            }
         }
 
         private void GetFactTable()
@@ -573,6 +594,13 @@ namespace BI_coursework
                 {
                     Decimal Sales = Convert.ToDecimal(reader["Sales"]);
                     Int32 Quantity = Convert.ToInt32(reader["Quantity"]);
+                    Decimal Profit = Convert.ToDecimal(reader["Profit"]);
+                    Decimal Discount = Convert.ToDecimal(reader["Discount"]);
+
+                    Int32 ProductID = GetProductId(reader["Reference"].ToString());
+                    Int32 TimeID = GetDateId(reader["Order Date"].ToString());
+                    Int32 CustomerID = 0;
+
                 }
             }
         }
