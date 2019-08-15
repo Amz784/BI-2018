@@ -700,6 +700,13 @@ namespace BI_coursework
 
             using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
             {
+                // Open Connection
+                myConnection.Open();
+                // SQl Command
+                SqlCommand command = new SqlCommand("SELECT ProductID FROM FactTable1 WHERE Value = @Value", myConnection);
+                command.Parameters.Add(new SqlParameter("Value", Value));
+
+
 
             }
 
