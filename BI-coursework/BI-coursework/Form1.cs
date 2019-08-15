@@ -125,7 +125,7 @@ namespace BI_coursework
         }
 
 
-        
+
 
 
         private int GetDateId(string date)
@@ -173,7 +173,7 @@ namespace BI_coursework
         {
             // Create A MDF Connection
             string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
-    
+
 
             using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
             {
@@ -307,7 +307,7 @@ namespace BI_coursework
                 connection.Open();
                 OleDbDataReader reader = null;
                 OleDbCommand getDates = new OleDbCommand(" SELECT [Order Date], [Ship Date] FROM [Student Sample 2 - Sheet1]", connection);
-                
+
                 // Read Query Results
                 reader = getDates.ExecuteReader();
                 // Loop To Retrieve All Results
@@ -322,8 +322,8 @@ namespace BI_coursework
             }
             lstGetDates.DataSource = Dates;
 
-                // Format Results
-                List<string> DatesFormatted = new List<string>();
+            // Format Results
+            List<string> DatesFormatted = new List<string>();
             // Remove Time - New List Looped Through Old - Splitting Data & Adding Back Only Dates
             foreach (string date in Dates)
             {
@@ -335,7 +335,7 @@ namespace BI_coursework
             lstGetDates.DataSource = DatesFormatted;
 
             // Split Dates & Insert
-            foreach(string date in DatesFormatted)
+            foreach (string date in DatesFormatted)
             {
                 splitDates(date);
             }
@@ -364,7 +364,7 @@ namespace BI_coursework
 
             insertTimedimension(dbDate, dayOfWeek, day, monthName, month, weekNumber, year, weekend, dayOfYear);
         }
-   
+
 
         private void insertTimedimension(string date, string dayName, Int32 dayNumber, string monthName, Int32 monthNumber, Int32 weekNumber, Int32 year, Boolean weekend, Int32 dayOfYear)
         {
@@ -386,10 +386,10 @@ namespace BI_coursework
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     // If Rows Exists - Date Exists - Update The Var
-                    if (reader.HasRows) exists = true;     
+                    if (reader.HasRows) exists = true;
                 }
-         
-                if(exists == false)
+
+                if (exists == false)
                 {
                     SqlCommand insertCommand = new SqlCommand(
                    " INSERT INTO Time (dayName, dayNumber, monthName, monthNumber, weekNumber, year, weekend, date, dayOfYear) " +
@@ -412,14 +412,14 @@ namespace BI_coursework
             }
         }
 
-            private void splitDates (string rawDate)
-         {
+        private void splitDates(string rawDate)
+        {
             // Split The Date Down & Assign It To Variable For Later Use
             string[] arrayDate = rawDate.Split('/');
             Int32 year = Convert.ToInt32(arrayDate[2]);
             Int32 month = Convert.ToInt32(arrayDate[1]);
             Int32 day = Convert.ToInt32(arrayDate[0]);
-         }
+        }
 
         private void btnGetProducts_Click(object sender, EventArgs e)
         {
@@ -445,7 +445,7 @@ namespace BI_coursework
                     Products.Add(reader[1].ToString());
                     Products.Add(reader[2].ToString());
                     Products.Add(reader[3].ToString());
-                   
+
                     string Category = reader[1].ToString();
                     string SubCategory = reader[2].ToString();
                     string Name = reader[3].ToString();
@@ -482,9 +482,9 @@ namespace BI_coursework
                 }
                 connection.Close();
             }
-                lstGetProducts.DataSource = Products;
-            
-    
+            lstGetProducts.DataSource = Products;
+
+
         }
 
         private void insertProductdimension(string Category, string SubCategory, string Name, string Reference)
@@ -530,7 +530,7 @@ namespace BI_coursework
                     // Insert The Line
                     int recordsAffected = insertCommand.ExecuteNonQuery();
                     Console.WriteLine("Records Affected: " + recordsAffected);
-                        
+
                 }
             }
 
@@ -553,7 +553,7 @@ namespace BI_coursework
                 // Open Connection
                 myConnection.Open();
                 // Check If Date Exists
-                SqlCommand command = new SqlCommand("SELECT id, dayName, dayNumber, monthName, monthNumber, weekNumber, year, " + 
+                SqlCommand command = new SqlCommand("SELECT id, dayName, dayNumber, monthName, monthNumber, weekNumber, year, " +
                     " weekend, date, dayOfYear FROM Time", myConnection);
 
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -612,9 +612,9 @@ namespace BI_coursework
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    if(reader.HasRows)
+                    if (reader.HasRows)
                     {
-                        while(reader.Read())
+                        while (reader.Read())
                         {
                             string Category = reader["Category"].ToString();
                             string SubCategory = reader["SubCategory"].ToString();
@@ -641,6 +641,7 @@ namespace BI_coursework
         {
             // Create The Database String
             string connectionString = Properties.Settings.Default.Data_set_1ConnectionString;
+            string connectionString2 = Properties.Settings.Default.DataSet2ConnectionString;
 
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
@@ -648,8 +649,7 @@ namespace BI_coursework
                 connection.Open();
                 OleDbDataReader reader = null;
                 OleDbCommand getDates = new OleDbCommand("SELECT [Row ID], [Order ID], [Order Date], [Ship Date], " +
-                " [Ship Mode], [Customer ID], [Cusomer Name], Segment, Country, City, State, [Postal Code], [Product ID], " +
-                " Region, Category, [Sub-Category], [ProductName], Sales, Quantity, Profit, Discount FROM Sheet1", connection);
+                " [Ship Mode], [Product ID], Category, [Sub-Category], [ProductName], Sales, Quantity, Profit, Discount FROM Sheet1", connection);
 
                 reader = getDates.ExecuteReader();
                 while (reader.Read())
@@ -664,9 +664,48 @@ namespace BI_coursework
                     Int32 CustomerID = 0;
 
                 }
+                // Close Connection
+                connection.Close();
+            }
+            using (OleDbConnection connection = new OleDbConnection(connectionString2))
+            {
+                // Open Connection
+                connection.Open();
+                OleDbDataReader reader = null;
+                OleDbCommand getDates = new OleDbCommand("SELECT [Row ID], [Order ID], [Order Date], [Ship Date], " +
+                " [Ship Mode], [Product ID], Category, [Sub-Category], [ProductName], Sales, Quantity, Profit, Discount FROM [Student Sample 2 - Sheet1]", connection);
+
+                reader = getDates.ExecuteReader();
+                while (reader.Read())
+                {
+                    Decimal Sales = Convert.ToDecimal(reader["Sales"]);
+                    Int32 Quantity = Convert.ToInt32(reader["Quantity"]);
+                    Decimal Profit = Convert.ToDecimal(reader["Profit"]);
+                    Decimal Discount = Convert.ToDecimal(reader["Discount"]);
+
+                    Int32 ProductID = GetProductId(reader["Reference"].ToString());
+                    Int32 TimeID = GetDateId(reader["Order Date"].ToString());
+                    Int32 CustomerID = 0;
+
+                }
+                // Close Connection
+                connection.Close();
+            }
+        }
+
+            private void  insertFactTable(Int32 ProductID, Int32 TimeID, Int32 CustomerID, Decimal Sales, Int32 Quantity, Decimal Profit, Decimal Discount)
+            {
+                // Create A MDF Connection
+                string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
+
+            using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
+            {
+
+            }
+
             }
         }
     }
-}
+
 
 
