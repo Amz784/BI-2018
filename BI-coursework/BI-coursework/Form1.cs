@@ -426,6 +426,7 @@ namespace BI_coursework
             // Create A List To Store Products In
             List<string> Products = new List<string>();
             // Clear Items
+            lstGetProducts.DataSource = null;
             lstGetProducts.Items.Clear();
 
             // Create Database String 
@@ -740,13 +741,9 @@ namespace BI_coursework
                     int recordsAffected = insertCommand.ExecuteNonQuery();
 
                 }
-
-
-
             }
-
-            }
-        }
+          }
+       }
     }
 
 
