@@ -663,6 +663,9 @@ namespace BI_coursework
                     Int32 TimeID = GetDateId(reader["Order Date"].ToString());
                     Int32 CustomerID = 0;
 
+                    Decimal Value = Sales / Quantity;
+
+                    insertFactTable(ProductID, TimeID, CustomerID, Value, Discount, Profit, Quantity);
                 }
                 // Close Connection
                 connection.Close();
@@ -682,18 +685,20 @@ namespace BI_coursework
                     Int32 Quantity = Convert.ToInt32(reader["Quantity"]);
                     Decimal Profit = Convert.ToDecimal(reader["Profit"]);
                     Decimal Discount = Convert.ToDecimal(reader["Discount"]);
-
                     Int32 ProductID = GetProductId(reader["Reference"].ToString());
                     Int32 TimeID = GetDateId(reader["Order Date"].ToString());
                     Int32 CustomerID = 0;
 
+                    Decimal Value = Sales / Quantity;
+
+                    insertFactTable(ProductID, TimeID, CustomerID, Value, Discount, Profit, Quantity);
                 }
                 // Close Connection
                 connection.Close();
             }
         }
 
-            private void  insertFactTable(Int32 ProductID, Int32 TimeID, Int32 CustomerID, Decimal Sales, Int32 Quantity, Decimal Profit, Decimal Discount)
+            private void  insertFactTable(Int32 ProductID, Int32 TimeID, Int32 CustomerID, Decimal Value, Decimal Discount, Decimal Profit, Int32 Quantity)
             {
                 // Create A MDF Connection
                 string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
@@ -705,6 +710,36 @@ namespace BI_coursework
                 // SQl Command
                 SqlCommand command = new SqlCommand("SELECT ProductID FROM FactTable1 WHERE Value = @Value", myConnection);
                 command.Parameters.Add(new SqlParameter("Value", Value));
+
+                // Create A Variable 
+                Boolean exists = false;
+
+                // Run The Command
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    // If There Are Rows
+                    if (reader.HasRows)
+                    {
+                        exists = true;
+                    }
+
+                }
+                if (exists == false)
+                {
+                    SqlCommand insertCommand = new SqlCommand("INSERT INTO FactTable1 (ProductID, TimeID, CustomerID, Value, Discount, Profit, Quantity)" +
+                    " VALUES (@ProductID, @TimeID, @CustomerID, @Value, @Discount, @Profit, @Quantity)", myConnection);
+                    insertCommand.Parameters.Add(new SqlParameter("ProductID", ProductID));
+                    insertCommand.Parameters.Add(new SqlParameter("TimeID", TimeID));
+                    insertCommand.Parameters.Add(new SqlParameter("CustomerID", CustomerID));
+                    insertCommand.Parameters.Add(new SqlParameter("Value", Value));
+                    insertCommand.Parameters.Add(new SqlParameter("Discount", Discount));
+                    insertCommand.Parameters.Add(new SqlParameter("Profit", Profit));
+                    insertCommand.Parameters.Add(new SqlParameter("Quantity", Quantity));
+
+                    // Insert The Line
+                    int recordsAffected = insertCommand.ExecuteNonQuery();
+
+                }
 
 
 
