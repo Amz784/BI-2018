@@ -29,13 +29,10 @@ namespace BI_coursework
 
         private int GetDateId(string date)
         {
-            
             // Remove Time
             var dateSplit = date.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
             // Overwrite
             date = dateSplit[0];
-
-   
             // Split Date
             string[] arrayDate = date.Split('/');
             Int32 year = Convert.ToInt32(arrayDate[2]);
@@ -44,6 +41,7 @@ namespace BI_coursework
 
             DateTime myDate = new DateTime(year, month, day);
             string dbDate = myDate.ToString("M/dd/yyyy");
+
 
             // Create A Connection TO MDF File
             string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
