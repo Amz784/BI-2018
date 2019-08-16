@@ -569,7 +569,7 @@ namespace BI_coursework
                 // Open Connection
                 myConnection.Open();
                 // SQl Command
-                SqlCommand command = new SqlCommand("SELECT ProductID, TimeID FROM FactTable1 WHERE ProductID = @ProductID AND TimeID = @TimeID", myConnection);
+                SqlCommand command = new SqlCommand("SELECT ProductID, TimeID FROM FactTable WHERE ProductID = @ProductID AND TimeID = @TimeID", myConnection);
                 command.Parameters.Add(new SqlParameter("ProductID", ProductID));
                 command.Parameters.Add(new SqlParameter("TimeID", TimeID));
 
@@ -588,7 +588,7 @@ namespace BI_coursework
                 }
                 if (exists == false)
                 {
-                    SqlCommand insertCommand = new SqlCommand("INSERT INTO FactTable1 (ProductID, TimeID, Sales, Discount, Profit, Quantity)" +
+                    SqlCommand insertCommand = new SqlCommand("INSERT INTO FactTable (ProductID, TimeID, Sales, Discount, Profit, Quantity)" +
                     " VALUES (@ProductID, @TimeID, @Sales, @Discount, @Profit, @Quantity)", myConnection);
                     insertCommand.Parameters.Add(new SqlParameter("ProductID", ProductID));
                     insertCommand.Parameters.Add(new SqlParameter("TimeID", TimeID));
@@ -635,7 +635,7 @@ namespace BI_coursework
                 {
                     // Open Connection
                     myConnection.Open();
-                    SqlCommand command = new SqlCommand("SELECT COUNT(*) as SalesNumber FROM FactTable1 JOIN Time" +
+                    SqlCommand command = new SqlCommand("SELECT COUNT(*) as SalesNumber FROM FactTable JOIN Time" +
                         " ON FactTable1.TimeID = Time.ID WHERE Time.date = @date;", myConnection);
                     command.Parameters.Add(new SqlParameter("@date", dbDate));
 
@@ -679,7 +679,7 @@ namespace BI_coursework
                     // Open The Connection
                     myConnection.Open();
                     // SQL Command
-                    SqlCommand command = new SqlCommand("SELECT COUNT(*) AS Quantity FROM FactTable1 JOIN Product ON FactTable1.ProductID = Product.ID WHERE Product.category = @category; ", myConnection);
+                    SqlCommand command = new SqlCommand("SELECT COUNT(*) AS Quantity FROM FactTable JOIN Product ON FactTable1.ProductID = Product.ID WHERE Product.category = @category; ", myConnection);
                     command.Parameters.Add(new SqlParameter("category", category));
 
                     using (SqlDataReader reader = command.ExecuteReader())

@@ -53,9 +53,9 @@
             this.chtLine = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.btnLoadData = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnLoadProductData = new System.Windows.Forms.Button();
             this.chtPie = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -64,8 +64,8 @@
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chtLine)).BeginInit();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chtPie)).BeginInit();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chtPie)).BeginInit();
             this.SuspendLayout();
             // 
             // tabPage1
@@ -198,6 +198,7 @@
             // lstGetProducts
             // 
             this.lstGetProducts.FormattingEnabled = true;
+            this.lstGetProducts.HorizontalScrollbar = true;
             this.lstGetProducts.Location = new System.Drawing.Point(6, 259);
             this.lstGetProducts.Name = "lstGetProducts";
             this.lstGetProducts.Size = new System.Drawing.Size(188, 108);
@@ -273,6 +274,17 @@
             this.tabPage3.Text = "Product";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.btnLoadProductData);
+            this.groupBox4.Controls.Add(this.chtPie);
+            this.groupBox4.Location = new System.Drawing.Point(18, 19);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(663, 371);
+            this.groupBox4.TabIndex = 2;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Product Category";
+            // 
             // btnLoadProductData
             // 
             this.btnLoadProductData.Location = new System.Drawing.Point(38, 155);
@@ -300,17 +312,6 @@
             this.chtPie.TabIndex = 1;
             this.chtPie.Text = "Product Category Chart";
             // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.btnLoadProductData);
-            this.groupBox4.Controls.Add(this.chtPie);
-            this.groupBox4.Location = new System.Drawing.Point(18, 19);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(663, 371);
-            this.groupBox4.TabIndex = 2;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Product Category";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -327,8 +328,8 @@
             this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chtLine)).EndInit();
             this.tabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chtPie)).EndInit();
             this.groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chtPie)).EndInit();
             this.ResumeLayout(false);
 
         }
