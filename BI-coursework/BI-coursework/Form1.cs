@@ -137,7 +137,7 @@ namespace BI_coursework
             Int32 day = Convert.ToInt32(arrayDate[0]);
 
             DateTime myDate = new DateTime(year, month, day);
-            string dbDate = myDate.ToString("M/dd/yyyy");
+            string dbDate = myDate.ToString("dd/M/yyyy");
 
             // Create A Connection TO MDF File
             string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
@@ -148,7 +148,7 @@ namespace BI_coursework
                 myConnection.Open();
                 // Check If The Date Exists In The Database - No Duplicating
                 SqlCommand command = new SqlCommand("SELECT id FROM Time Where date = @date", myConnection);
-                command.Parameters.Add(new SqlParameter("date", date));
+                command.Parameters.Add(new SqlParameter("date", dbDate));
 
                 // Create A Variable & Assign As False Default
                 Boolean exists = false;
@@ -214,51 +214,7 @@ namespace BI_coursework
             //return the details
             return 0;
         }
-        private void insertIntoFactTable(int ProductID, int TimeID, int CustomerID, double Value, double Discount, double Profit, double Quantity)
-        {
-            // Create A Connection To MDF File
-            string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
-
-            using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
-            {
-                // Open The SQL Connection
-                myConnection.Open();
-                // Check If The Date Exists In The Database - No Duplicating
-                SqlCommand command = new SqlCommand("SELECT id FROM FactTable1 Where Value = @Value", myConnection);
-                command.Parameters.Add(new SqlParameter("Value", Value));
-
-                // Create A Variable & Assign As False Default
-                Boolean exists = false;
-
-                // Run & Read Results
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    // If Rows Exists - Date Exists - Update The Var
-                    if (reader.HasRows) exists = true;
-                }
-
-                if (exists == false)
-                {
-                    SqlCommand insertCommand = new SqlCommand("INSERT INTO FactTable1 (ProductID, TimeID, CustomerID, Value, Discount, Profit, Quantity)" +
-                        " VALUES (@ProductID, @TimeID, @CustomerID, @Value, @Discount, @Profit, @Quantity)", myConnection);
-                    insertCommand.Parameters.Add(new SqlParameter("ProductID", ProductID));
-                    insertCommand.Parameters.Add(new SqlParameter("TimeID", TimeID));
-                    insertCommand.Parameters.Add(new SqlParameter("CustomerID", CustomerID));
-                    insertCommand.Parameters.Add(new SqlParameter("Value", Value));
-                    insertCommand.Parameters.Add(new SqlParameter("Discount", Discount));
-                    insertCommand.Parameters.Add(new SqlParameter("Profit", Profit));
-                    insertCommand.Parameters.Add(new SqlParameter("Quantity", Quantity));
-
-                    // Insert The Line
-                    int recordsAffected = insertCommand.ExecuteNonQuery();
-
-
-
-
-                }
-            }
-        }
-
+      
         private void GetFactTable()
         {
             //Create new list to store the named results in.
@@ -339,15 +295,13 @@ namespace BI_coursework
             {
                 splitDates(date);
             }
-            splitDates(DatesFormatted[0]);
+           
 
             // Variables
             string[] arrayDate = DatesFormatted[0].ToString().Split('/');
             Int32 year = Convert.ToInt32(arrayDate[2]);
             Int32 month = Convert.ToInt32(arrayDate[1]);
             Int32 day = Convert.ToInt32(arrayDate[0]);
-
-            Console.WriteLine(DatesFormatted[0].ToString());
 
             DateTime myDate = new DateTime(year, month, day);
             Console.WriteLine(" Day Of Week: " + myDate.DayOfWeek);
@@ -386,39 +340,53 @@ namespace BI_coursework
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     // If Rows Exists - Date Exists - Update The Var
-                    if (reader.HasRows) exists = true;
+                    if (reader.HasRows)
+                    {
+                        exists = true;
+                    }
                 }
 
-                if (exists == false)
-                {
-                    SqlCommand insertCommand = new SqlCommand(
-                   " INSERT INTO Time (dayName, dayNumber, monthName, monthNumber, weekNumber, year, weekend, date, dayOfYear) " +
-                   " VALUES (@dayName, @dayNumber, @monthName, @monthNumber, @weekNumber, @year, @weekend, @date, @dayOfYear) ", myConnection);
-                    insertCommand.Parameters.Add(new SqlParameter("dayName", dayName));
-                    insertCommand.Parameters.Add(new SqlParameter("dayNumber", dayNumber));
-                    insertCommand.Parameters.Add(new SqlParameter("monthName", monthName));
-                    insertCommand.Parameters.Add(new SqlParameter("monthNumber", monthNumber));
-                    insertCommand.Parameters.Add(new SqlParameter("weekNumber", weekNumber));
-                    insertCommand.Parameters.Add(new SqlParameter("year", year));
-                    insertCommand.Parameters.Add(new SqlParameter("weekend", weekend));
-                    insertCommand.Parameters.Add(new SqlParameter("date", date));
-                    insertCommand.Parameters.Add(new SqlParameter("dayOfYear", dayOfYear));
+                    if (exists == false)
+                    {
+                        SqlCommand insertCommand = new SqlCommand(
+                       " INSERT INTO Time (dayName, dayNumber, monthName, monthNumber, weekNumber, year, weekend, date, dayOfYear) " +
+                       " VALUES (@dayName, @dayNumber, @monthName, @monthNumber, @weekNumber, @year, @weekend, @date, @dayOfYear) ", myConnection);
+                        insertCommand.Parameters.Add(new SqlParameter("dayName", dayName));
+                        insertCommand.Parameters.Add(new SqlParameter("dayNumber", dayNumber));
+                        insertCommand.Parameters.Add(new SqlParameter("monthName", monthName));
+                        insertCommand.Parameters.Add(new SqlParameter("monthNumber", monthNumber));
+                        insertCommand.Parameters.Add(new SqlParameter("weekNumber", weekNumber));
+                        insertCommand.Parameters.Add(new SqlParameter("year", year));
+                        insertCommand.Parameters.Add(new SqlParameter("weekend", weekend));
+                        insertCommand.Parameters.Add(new SqlParameter("date", date));
+                        insertCommand.Parameters.Add(new SqlParameter("dayOfYear", dayOfYear));
 
-                    // Insert The Line
-                    int recordsAffected = insertCommand.ExecuteNonQuery();
-                    Console.WriteLine("Records Affected: " + recordsAffected);
+                        // Insert The Line
+                        int recordsAffected = insertCommand.ExecuteNonQuery();
+                        Console.WriteLine("Records Affected: " + recordsAffected);
 
+                    }
                 }
             }
-        }
+  
 
-        private void splitDates(string rawDate)
+        private void splitDates(string date)
         {
             // Split The Date Down & Assign It To Variable For Later Use
-            string[] arrayDate = rawDate.Split('/');
+            string[] arrayDate = date.Split('/');
             Int32 year = Convert.ToInt32(arrayDate[2]);
             Int32 month = Convert.ToInt32(arrayDate[1]);
             Int32 day = Convert.ToInt32(arrayDate[0]);
+            DateTime dateTime = new DateTime(year, month, day);
+            string dayOfWeek = dateTime.DayOfWeek.ToString();
+            int dayOfYear = dateTime.DayOfYear;
+            string monthName = dateTime.ToString("MMM");
+            int weekNumber = dayOfYear / 7;
+            bool weekend = false;
+            if (dayOfWeek == "Saturady" || dayOfWeek == "Sunday") weekend = true;
+            string dbDate = dateTime.ToString("M/dd/yyyy");
+
+            insertTimedimension(dbDate, dayOfWeek, day, monthName, month, weekNumber, year, weekend, dayOfYear);
         }
 
         private void btnGetProducts_Click(object sender, EventArgs e)
