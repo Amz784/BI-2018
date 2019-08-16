@@ -698,7 +698,13 @@ namespace BI_coursework
                     }
                 }
             }
+                // Bar Chart
+                chtPie.DataSource = quantityCount;
+            chtPie.Series[0].XValueMember = "Key";
+            chtPie.Series[0].YValueMembers = "Values";
+            chtPie.DataBind();
         }
+            
     }
   }
 
