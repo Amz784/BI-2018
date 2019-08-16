@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lstGetFromFactTable = new System.Windows.Forms.ListBox();
@@ -229,20 +229,21 @@
             // 
             // chtLine
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chtLine.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chtLine.Legends.Add(legend2);
+            this.chtLine.BorderlineColor = System.Drawing.Color.Black;
+            chartArea1.Name = "ChartArea1";
+            this.chtLine.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chtLine.Legends.Add(legend1);
             this.chtLine.Location = new System.Drawing.Point(29, 72);
             this.chtLine.Name = "chtLine";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chtLine.Series.Add(series2);
-            this.chtLine.Size = new System.Drawing.Size(300, 300);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chtLine.Series.Add(series1);
+            this.chtLine.Size = new System.Drawing.Size(453, 300);
             this.chtLine.TabIndex = 2;
-            this.chtLine.Text = "chart1";
+            this.chtLine.Text = "Sales Per Day";
             // 
             // btnLoadData
             // 
@@ -273,6 +274,7 @@
             this.btnLoadProductData.TabIndex = 0;
             this.btnLoadProductData.Text = "Load Product Data";
             this.btnLoadProductData.UseVisualStyleBackColor = true;
+            this.btnLoadProductData.Click += new System.EventHandler(this.btnLoadProductData_Click);
             // 
             // Form1
             // 

@@ -27,107 +27,6 @@ namespace BI_coursework
 
         }
 
-        //This needs replacing with whatever button we decide to make
-        private void GetDataFromSource_Click(object sender, EventArgs e)
-        {
-            GetDatesFromSource();
-            GetProductFromSource();
-            GetCustomerFromSource();
-        }
-
-        private void GetDatesFromSource()
-        {
-            //Create a list
-
-            //Connect to the source
-
-            //Get the data
-
-            //Add data to temp list
-
-            //Create a new list for the formatted data.
-
-            //Format the data and add to new list
-
-        }
-
-        private void GetProductFromSource()
-        {
-            //Create a list
-
-            //Connect to the source
-
-            //Get the data
-
-            //Add data to list
-
-        }
-
-        private void GetCustomerFromSource()
-        {
-            //Create a list
-
-            //Connect to the source
-
-            //Get the data
-
-            //Add data to list
-        }
-
-        private void insertCustomerDimension(string name, string country, string city, string state, string postCode, string region, string reference)
-        {
-            //Create a connection to the MDF file
-
-            //Build the query
-
-            //Insert the data
-        }
-
-        //This needs replacing with whatever button we decide to make
-        private void GetFromDestinationButton_Click(object sender, EventArgs e)
-        {
-            GetAllDatesFromDimension();
-            GetAllProductsFromDimension();
-            GetAllCustomersFromDimension();
-        }
-
-        private void GetAllDatesFromDimension()
-        {
-            //Create new list to store the named results in.
-
-            //Create the database string
-
-            //Run the query
-
-            //Bind the listbox to the list.
-
-        }
-        private void GetAllProductsFromDimension()
-        {
-            //Create new list to store the named results in.
-
-            //Create the database string
-
-            //Run the query
-
-            //Bind the listbox to the list.
-        }
-
-        private void GetAllCustomersFromDimension()
-        {
-            //Create new list to store the named results in.
-
-            //Create the database string
-
-            //Run the query
-
-            //Bind the listbox to the list.
-        }
-
-
-
-
-
         private int GetDateId(string date)
         {
             // Split Date
@@ -200,31 +99,6 @@ namespace BI_coursework
             return 0;
         }
 
-        private int GetCustomerId(string reference)
-        {
-
-            //Remove the timestamps
-
-            //Split the clean date down and assign it to variables for later use.
-
-            //Create a connection to the MDF file
-
-            //Run the command & read the results
-
-            //return the details
-            return 0;
-        }
-      
-        private void GetFactTable()
-        {
-            //Create new list to store the named results in.
-
-            //Create the database string
-
-            //Run the query
-
-            //Bind the listbox to the list.
-        }
 
         private void btnGetDates_Click(object sender, EventArgs e)
         {
@@ -736,7 +610,7 @@ namespace BI_coursework
         {
             // Hard Coded Week
             // List
-            List<String> dateList = new List<string>(new String[] { "01/06/2014", "01/07/2014", "01/08/2014", "01/09/2014", "01/10/2014", "01/11/2014", "01/12/2014", });
+            List<String> dateList = new List<string>(new String[] { "01/06/2014", "01/07/2014", "01/08/2014", "01/09/2014", "01/10/2014", "01/11/2014", "01/12/2014" });
 
             // Store Information Into Dictionary - Accessed Via Date & Not Array
             // Dictionary Type Is String
@@ -761,8 +635,8 @@ namespace BI_coursework
                 {
                     // Open Connection
                     myConnection.Open();
-                    SqlCommand command = new SqlCommand("SELECT COUNT(*) as SalesNumber FROM FactTAble1 JOIN Time" +
-                        " ON FactTable1.TimeID = TIme.ID WHERE Time.date = @date;", myConnection);
+                    SqlCommand command = new SqlCommand("SELECT COUNT(*) as SalesNumber FROM FactTable1 JOIN Time" +
+                        " ON FactTable1.TimeID = Time.ID WHERE Time.date = @date;", myConnection);
                     command.Parameters.Add(new SqlParameter("@date", dbDate));
 
                     using (SqlDataReader reader = command.ExecuteReader())
@@ -783,12 +657,47 @@ namespace BI_coursework
             }
             // End Of Loop
 
-            // Column Chart
+            // Line Chart
             chtLine.DataSource = salesCount;
             chtLine.Series[0].XValueMember = "Key";
             chtLine.Series[0].YValueMembers = "Value";
             chtLine.DataBind();
 
+        }
+
+        private void btnLoadProductData_Click(object sender, EventArgs e)
+        {
+            List<string> TypeList = new List<string>(new string[] { "Office Supplies", "Furniture", "Technology" });
+            Dictionary<string, int> quantityCount = new Dictionary<string, int>();
+
+            // Create Database String
+            string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
+            foreach (string category in TypeList)
+            {
+                using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
+                {
+                    // Open The Connection
+                    myConnection.Open();
+                    // SQL Command
+                    SqlCommand command = new SqlCommand("SELECT COUNT(*) AS Quantity FROM FactTable1 JOIN Product ON FactTable1.ProductID = Product.ID WHERE Product.category = @category; ", myConnection);
+                    command.Parameters.Add(new SqlParameter("category", category));
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                quantityCount.Add(category, Int32.Parse(reader["Quantity"].ToString()));
+                            }
+                        }
+                        else
+                        {
+                            quantityCount.Add(category, 0);
+                        }
+                    }
+                }
+            }
         }
     }
   }
