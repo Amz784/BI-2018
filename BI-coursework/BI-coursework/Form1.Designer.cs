@@ -55,7 +55,7 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnLoadProductData = new System.Windows.Forms.Button();
-            this.chtPie = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.chtColumn = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -65,7 +65,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.chtLine)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chtPie)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chtColumn)).BeginInit();
             this.SuspendLayout();
             // 
             // tabPage1
@@ -277,7 +277,7 @@
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.btnLoadProductData);
-            this.groupBox4.Controls.Add(this.chtPie);
+            this.groupBox4.Controls.Add(this.chtColumn);
             this.groupBox4.Location = new System.Drawing.Point(18, 19);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(663, 371);
@@ -295,22 +295,21 @@
             this.btnLoadProductData.UseVisualStyleBackColor = true;
             this.btnLoadProductData.Click += new System.EventHandler(this.btnLoadProductData_Click);
             // 
-            // chtPie
+            // chtColumn
             // 
             chartArea2.Name = "ChartArea1";
-            this.chtPie.ChartAreas.Add(chartArea2);
+            this.chtColumn.ChartAreas.Add(chartArea2);
             legend2.Name = "Legend1";
-            this.chtPie.Legends.Add(legend2);
-            this.chtPie.Location = new System.Drawing.Point(320, 32);
-            this.chtPie.Name = "chtPie";
+            this.chtColumn.Legends.Add(legend2);
+            this.chtColumn.Location = new System.Drawing.Point(320, 32);
+            this.chtColumn.Name = "chtColumn";
             series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
             series2.Legend = "Legend1";
             series2.Name = "Series1";
-            this.chtPie.Series.Add(series2);
-            this.chtPie.Size = new System.Drawing.Size(300, 300);
-            this.chtPie.TabIndex = 1;
-            this.chtPie.Text = "Product Category Chart";
+            this.chtColumn.Series.Add(series2);
+            this.chtColumn.Size = new System.Drawing.Size(300, 300);
+            this.chtColumn.TabIndex = 1;
+            this.chtColumn.Text = "Product Category Chart";
             // 
             // Form1
             // 
@@ -329,7 +328,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.chtLine)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chtPie)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chtColumn)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -355,7 +354,7 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart chtLine;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Button btnLoadProductData;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chtPie;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chtColumn;
         private System.Windows.Forms.GroupBox groupBox4;
     }
 }

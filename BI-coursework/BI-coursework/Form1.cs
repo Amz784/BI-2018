@@ -29,6 +29,13 @@ namespace BI_coursework
 
         private int GetDateId(string date)
         {
+            
+            // Remove Time
+            var dateSplit = date.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+            // Overwrite
+            date = dateSplit[0];
+
+   
             // Split Date
             string[] arrayDate = date.Split('/');
             Int32 year = Convert.ToInt32(arrayDate[2]);
@@ -36,7 +43,7 @@ namespace BI_coursework
             Int32 day = Convert.ToInt32(arrayDate[0]);
 
             DateTime myDate = new DateTime(year, month, day);
-            string dbDate = myDate.ToString("dd/M/yyyy");
+            string dbDate = myDate.ToString("M/dd/yyyy");
 
             // Create A Connection TO MDF File
             string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
@@ -80,7 +87,7 @@ namespace BI_coursework
                 myConnection.Open();
                 // Sql Command
                 SqlCommand command = new SqlCommand(" SELECT Id FROM Product WHERE name = @name", myConnection);
-                //command.Parameters.Add(new SqlParameter("ProductID", ProductID));
+                command.Parameters.Add(new SqlParameter("name", Name));
 
 
                 // Create A Variable & Assign It As False
@@ -340,7 +347,7 @@ namespace BI_coursework
                 // Open Connection
                 myConnection.Open();
                 // Sql Command
-                SqlCommand command = new SqlCommand(" SELECT Id FROM Product WHERE name = @name", myConnection);
+                SqlCommand command = new SqlCommand(" SELECT Id FROM Product WHERE reference = @reference", myConnection);
                 command.Parameters.Add(new SqlParameter("Category", Category));
                 command.Parameters.Add(new SqlParameter("SubCategory", SubCategory));
                 command.Parameters.Add(new SqlParameter("Name", Name));
@@ -484,9 +491,7 @@ namespace BI_coursework
         {
             // Create A List
             List<string> FactTable = new List<string>();
-            // Clear List
-            lstGetFromFactTable.DataSource = null;
-            lstGetFromFactTable.Items.Clear();
+           
             // Create The Database String
             string connectionString = Properties.Settings.Default.Data_set_1ConnectionString;
             string connectionString2 = Properties.Settings.Default.DataSet2ConnectionString;
@@ -496,7 +501,7 @@ namespace BI_coursework
                 // Open Connection
                 connection.Open();
                 OleDbDataReader reader = null;
-                OleDbCommand getFactTable = new OleDbCommand("SELECT [Order Date], Reference, Sales, Quantity, Profit, Discount FROM Sheet1", connection);
+                OleDbCommand getFactTable = new OleDbCommand("SELECT [Product ID], [Order ID], Sales, Quantity, Profit, Discount FROM Sheet1", connection);
 
                 reader = getFactTable.ExecuteReader();
                 while (reader.Read())
@@ -507,6 +512,7 @@ namespace BI_coursework
                     FactTable.Add(reader[4].ToString());
                     FactTable.Add(reader[5].ToString());
                     FactTable.Add(reader[0].ToString());
+
                     // Get The Numeric Value
                     Decimal Sales = Convert.ToDecimal(reader[2]);
                     Int32 Quantity = Convert.ToInt32(reader[3]);
@@ -515,7 +521,7 @@ namespace BI_coursework
                     // Dimension ID
                     Int32 ProductID = GetProductId(reader[0].ToString());
                     Int32 TimeID = GetDateId(reader[1].ToString());
-                    
+
 
                     insertFactTable(ProductID, TimeID, Sales, Discount, Profit, Quantity);
                 }
@@ -527,17 +533,12 @@ namespace BI_coursework
                 // Open Connection
                 connection.Open();
                 OleDbDataReader reader = null;
-                OleDbCommand getFactTable = new OleDbCommand("SELECT [Order Date], Reference, Sales, Quantity, Profit, Discount FROM [Student Sample 2 - Sheet1]", connection);
+                OleDbCommand getFactTable = new OleDbCommand("SELECT [Order ID], [Product ID], Sales, Quantity, Profit, Discount FROM [Student Sample 2 - Sheet1]", connection);
 
                 reader = getFactTable.ExecuteReader();
                 while (reader.Read())
                 {
-                    FactTable.Add(reader[1].ToString());
-                    FactTable.Add(reader[2].ToString());
-                    FactTable.Add(reader[3].ToString());
-                    FactTable.Add(reader[4].ToString());
-                    FactTable.Add(reader[5].ToString());
-                    FactTable.Add(reader[0].ToString());
+             ;
                     // Get The Numeric Value
                     Decimal Sales = Convert.ToDecimal(reader[2]);
                     Int32 Quantity = Convert.ToInt32(reader[3]);
@@ -546,8 +547,6 @@ namespace BI_coursework
                     // Dimension ID
                     Int32 ProductID = GetProductId(reader[0].ToString());
                     Int32 TimeID = GetDateId(reader[1].ToString());
-
-
 
                     insertFactTable(ProductID, TimeID, Sales, Discount, Profit, Quantity);
                 }
@@ -636,7 +635,7 @@ namespace BI_coursework
                     // Open Connection
                     myConnection.Open();
                     SqlCommand command = new SqlCommand("SELECT COUNT(*) as SalesNumber FROM FactTable JOIN Time" +
-                        " ON FactTable1.TimeID = Time.ID WHERE Time.date = @date;", myConnection);
+                        " ON FactTable.TimeID = Time.ID WHERE Time.date = @date;", myConnection);
                     command.Parameters.Add(new SqlParameter("@date", dbDate));
 
                     using (SqlDataReader reader = command.ExecuteReader())
@@ -679,7 +678,7 @@ namespace BI_coursework
                     // Open The Connection
                     myConnection.Open();
                     // SQL Command
-                    SqlCommand command = new SqlCommand("SELECT COUNT(*) AS Quantity FROM FactTable JOIN Product ON FactTable1.ProductID = Product.ID WHERE Product.category = @category; ", myConnection);
+                    SqlCommand command = new SqlCommand("SELECT COUNT(*) AS Quantity FROM FactTable JOIN Product ON FactTable.ProductID = Product.ID WHERE Product.category = @category; ", myConnection);
                     command.Parameters.Add(new SqlParameter("category", category));
 
                     using (SqlDataReader reader = command.ExecuteReader())
@@ -698,11 +697,11 @@ namespace BI_coursework
                     }
                 }
             }
-                // Bar Chart
-                chtPie.DataSource = quantityCount;
-            chtPie.Series[0].XValueMember = "Key";
-            chtPie.Series[0].YValueMembers = "Values";
-            chtPie.DataBind();
+                // Column Chart
+            chtColumn.DataSource = quantityCount;
+            chtColumn.Series[0].XValueMember = "Key";
+            chtColumn.Series[0].YValueMembers = "Values";
+            chtColumn.DataBind();
         }
             
     }
