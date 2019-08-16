@@ -640,6 +640,11 @@ namespace BI_coursework
 
         private void btnBuildFactTable_Click(object sender, EventArgs e)
         {
+            // Create A List
+            List<string> FactTable = new List<string>();
+            // Clear List
+            lstGetFromFactTable.DataSource = null;
+            lstGetFromFactTable.Items.Clear();
             // Create The Database String
             string connectionString = Properties.Settings.Default.Data_set_1ConnectionString;
             string connectionString2 = Properties.Settings.Default.DataSet2ConnectionString;
@@ -649,7 +654,7 @@ namespace BI_coursework
                 // Open Connection
                 connection.Open();
                 OleDbDataReader reader = null;
-                OleDbCommand getDates = new OleDbCommand("SELECT [Row ID], [Order ID], [Order Date], [Ship Date], " +
+                OleDbCommand getDates = new OleDbCommand("SELECT ID, [Row ID], [Order ID], [Order Date], [Ship Date], " +
                 " [Ship Mode], [Product ID], Category, [Sub-Category], [ProductName], Sales, Quantity, Profit, Discount FROM Sheet1", connection);
 
                 reader = getDates.ExecuteReader();
@@ -662,11 +667,11 @@ namespace BI_coursework
 
                     Int32 ProductID = GetProductId(reader["Reference"].ToString());
                     Int32 TimeID = GetDateId(reader["Order Date"].ToString());
-                    Int32 CustomerID = 0;
+                    
 
                     Decimal Value = Sales / Quantity;
 
-                    insertFactTable(ProductID, TimeID, CustomerID, Value, Discount, Profit, Quantity);
+                    insertFactTable(ProductID, TimeID, Sales, Value, Discount, Profit, Quantity);
                 }
                 // Close Connection
                 connection.Close();
@@ -676,7 +681,7 @@ namespace BI_coursework
                 // Open Connection
                 connection.Open();
                 OleDbDataReader reader = null;
-                OleDbCommand getDates = new OleDbCommand("SELECT [Row ID], [Order ID], [Order Date], [Ship Date], " +
+                OleDbCommand getDates = new OleDbCommand("SELECT ID, [Row ID], [Order ID], [Order Date], [Ship Date], " +
                 " [Ship Mode], [Product ID], Category, [Sub-Category], [ProductName], Sales, Quantity, Profit, Discount FROM [Student Sample 2 - Sheet1]", connection);
 
                 reader = getDates.ExecuteReader();
@@ -688,18 +693,20 @@ namespace BI_coursework
                     Decimal Discount = Convert.ToDecimal(reader["Discount"]);
                     Int32 ProductID = GetProductId(reader["Reference"].ToString());
                     Int32 TimeID = GetDateId(reader["Order Date"].ToString());
-                    Int32 CustomerID = 0;
 
                     Decimal Value = Sales / Quantity;
 
-                    insertFactTable(ProductID, TimeID, CustomerID, Value, Discount, Profit, Quantity);
+                    insertFactTable(ProductID, TimeID, Sales, Value, Discount, Profit, Quantity);
                 }
                 // Close Connection
                 connection.Close();
             }
+            // Bind
+            lstGetFromFactTable.DataSource = FactTable;
+        
         }
 
-            private void  insertFactTable(Int32 ProductID, Int32 TimeID, Int32 CustomerID, Decimal Value, Decimal Discount, Decimal Profit, Int32 Quantity)
+            private void  insertFactTable(Int32 ProductID, Int32 TimeID, Decimal Sales, Decimal Value, Decimal Discount, Decimal Profit, Int32 Quantity)
             {
                 // Create A MDF Connection
                 string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
@@ -727,11 +734,11 @@ namespace BI_coursework
                 }
                 if (exists == false)
                 {
-                    SqlCommand insertCommand = new SqlCommand("INSERT INTO FactTable1 (ProductID, TimeID, CustomerID, Value, Discount, Profit, Quantity)" +
-                    " VALUES (@ProductID, @TimeID, @CustomerID, @Value, @Discount, @Profit, @Quantity)", myConnection);
+                    SqlCommand insertCommand = new SqlCommand("INSERT INTO FactTable1 (ProductID, TimeID, Sales, Value, Discount, Profit, Quantity)" +
+                    " VALUES (@ProductID, @TimeID, @Sales, @Value, @Discount, @Profit, @Quantity)", myConnection);
                     insertCommand.Parameters.Add(new SqlParameter("ProductID", ProductID));
                     insertCommand.Parameters.Add(new SqlParameter("TimeID", TimeID));
-                    insertCommand.Parameters.Add(new SqlParameter("CustomerID", CustomerID));
+                    insertCommand.Parameters.Add(new SqlParameter("Sales", Sales));
                     insertCommand.Parameters.Add(new SqlParameter("Value", Value));
                     insertCommand.Parameters.Add(new SqlParameter("Discount", Discount));
                     insertCommand.Parameters.Add(new SqlParameter("Profit", Profit));
@@ -743,7 +750,71 @@ namespace BI_coursework
                 }
             }
           }
-       }
+
+        private void btnLoadData_Click(object sender, EventArgs e)
+        {
+            // Hard Coded Week
+            // List
+            List<String> dateList = new List<string>(new String[] { "01/06/2014", "01/07/2014", "01/08/2014", "01/09/2014", "01/10/2014", "01/11/2014", "01/12/2014", });
+
+            // Store Information Into Dictionary - Accessed Via Date & Not Array
+            // Dictionary Type Is String
+            Dictionary<String, Int32> salesCount = new Dictionary<String, Int32>();
+
+            // Create A Connection TO MDF File
+            String connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
+
+            // Code For Each Date In List
+            foreach (String date in dateList)
+            {
+                // Split
+                string[] arrayDate = date.Split('/');
+                Int32 year = Convert.ToInt32(arrayDate[2]);
+                Int32 month = Convert.ToInt32(arrayDate[1]);
+                Int32 day = Convert.ToInt32(arrayDate[0]);
+                DateTime myDate = new DateTime(year, month, day);
+                // Convert To Database Friendly Format
+                string dbDate = myDate.ToString("dd/m/yyyy");
+
+                using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
+                {
+                    // Open Connection
+                    myConnection.Open();
+                    SqlCommand command = new SqlCommand("SELECT COUNT(*) as SalesNumber FROM FactTAble1 JOIN Time" +
+                        " ON FactTable1.TimeID = TIme.ID WHERE Time.date = @date;", myConnection);
+                    command.Parameters.Add(new SqlParameter("@date", dbDate));
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                salesCount.Add(date, Int32.Parse(reader["SalesNumber"].ToString()));
+                            }
+                        }
+                        else
+                        {
+                            salesCount.Add(date, 0);
+                        }
+                    }
+                }
+            }
+            // End Of Loop
+
+            // Column Chart
+            chtColumn.DataSource = salesCount;
+            chtColumn.Series[0].XValueMember = "Key";
+            chtColumn.Series[0].YValueMembers = "Value";
+            chtColumn.DataBind();
+
+        }
+
+        private void btnGetFromFactTable_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
     }
 
 
