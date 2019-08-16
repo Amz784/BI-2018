@@ -28,12 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend7 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend8 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lstGetFromFactTable = new System.Windows.Forms.ListBox();
@@ -50,17 +47,18 @@
             this.lstGetDates = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.btnLoadData = new System.Windows.Forms.Button();
-            this.chtColumn = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chtLine = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.btnLoadData = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.btnLoadProductData = new System.Windows.Forms.Button();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chtColumn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chtLine)).BeginInit();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabPage1
@@ -100,7 +98,7 @@
             // 
             this.btnBuildFactTable.Location = new System.Drawing.Point(17, 31);
             this.btnBuildFactTable.Name = "btnBuildFactTable";
-            this.btnBuildFactTable.Size = new System.Drawing.Size(136, 63);
+            this.btnBuildFactTable.Size = new System.Drawing.Size(136, 66);
             this.btnBuildFactTable.TabIndex = 11;
             this.btnBuildFactTable.Text = "Build Fact Table";
             this.btnBuildFactTable.UseVisualStyleBackColor = true;
@@ -210,6 +208,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -219,7 +218,6 @@
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.chtLine);
-            this.tabPage2.Controls.Add(this.chtColumn);
             this.tabPage2.Controls.Add(this.btnLoadData);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -229,48 +227,52 @@
             this.tabPage2.Text = "Sales";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // btnLoadData
-            // 
-            this.btnLoadData.Location = new System.Drawing.Point(9, 21);
-            this.btnLoadData.Name = "btnLoadData";
-            this.btnLoadData.Size = new System.Drawing.Size(75, 23);
-            this.btnLoadData.TabIndex = 0;
-            this.btnLoadData.Text = "Load Data";
-            this.btnLoadData.UseVisualStyleBackColor = true;
-            this.btnLoadData.Click += new System.EventHandler(this.btnLoadData_Click);
-            // 
-            // chtColumn
-            // 
-            chartArea7.Name = "ChartArea1";
-            this.chtColumn.ChartAreas.Add(chartArea7);
-            legend7.Name = "Legend1";
-            this.chtColumn.Legends.Add(legend7);
-            this.chtColumn.Location = new System.Drawing.Point(9, 76);
-            this.chtColumn.Name = "chtColumn";
-            series7.ChartArea = "ChartArea1";
-            series7.Legend = "Legend1";
-            series7.Name = "Series1";
-            this.chtColumn.Series.Add(series7);
-            this.chtColumn.Size = new System.Drawing.Size(300, 300);
-            this.chtColumn.TabIndex = 1;
-            this.chtColumn.Text = "chart1";
-            // 
             // chtLine
             // 
-            chartArea8.Name = "ChartArea1";
-            this.chtLine.ChartAreas.Add(chartArea8);
-            legend8.Name = "Legend1";
-            this.chtLine.Legends.Add(legend8);
-            this.chtLine.Location = new System.Drawing.Point(362, 90);
+            chartArea2.Name = "ChartArea1";
+            this.chtLine.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chtLine.Legends.Add(legend2);
+            this.chtLine.Location = new System.Drawing.Point(29, 72);
             this.chtLine.Name = "chtLine";
-            series8.ChartArea = "ChartArea1";
-            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series8.Legend = "Legend1";
-            series8.Name = "Series1";
-            this.chtLine.Series.Add(series8);
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chtLine.Series.Add(series2);
             this.chtLine.Size = new System.Drawing.Size(300, 300);
             this.chtLine.TabIndex = 2;
             this.chtLine.Text = "chart1";
+            // 
+            // btnLoadData
+            // 
+            this.btnLoadData.Location = new System.Drawing.Point(29, 20);
+            this.btnLoadData.Name = "btnLoadData";
+            this.btnLoadData.Size = new System.Drawing.Size(300, 46);
+            this.btnLoadData.TabIndex = 0;
+            this.btnLoadData.Text = "Load Sales Data";
+            this.btnLoadData.UseVisualStyleBackColor = true;
+            this.btnLoadData.Click += new System.EventHandler(this.btnLoadData_Click);
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.btnLoadProductData);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(780, 412);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Product";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // btnLoadProductData
+            // 
+            this.btnLoadProductData.Location = new System.Drawing.Point(9, 18);
+            this.btnLoadProductData.Name = "btnLoadProductData";
+            this.btnLoadProductData.Size = new System.Drawing.Size(250, 54);
+            this.btnLoadProductData.TabIndex = 0;
+            this.btnLoadProductData.Text = "Load Product Data";
+            this.btnLoadProductData.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -286,8 +288,8 @@
             this.groupBox1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chtColumn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chtLine)).EndInit();
+            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -311,6 +313,7 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button btnLoadData;
         private System.Windows.Forms.DataVisualization.Charting.Chart chtLine;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chtColumn;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Button btnLoadProductData;
     }
 }

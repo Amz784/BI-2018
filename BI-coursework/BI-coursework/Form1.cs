@@ -622,24 +622,28 @@ namespace BI_coursework
                 // Open Connection
                 connection.Open();
                 OleDbDataReader reader = null;
-                OleDbCommand getDates = new OleDbCommand("SELECT ID, [Row ID], [Order ID], [Order Date], [Ship Date], " +
-                " [Ship Mode], [Product ID], Category, [Sub-Category], [ProductName], Sales, Quantity, Profit, Discount FROM Sheet1", connection);
+                OleDbCommand getFactTable = new OleDbCommand("SELECT [Order Date], Reference, Sales, Quantity, Profit, Discount FROM Sheet1", connection);
 
-                reader = getDates.ExecuteReader();
+                reader = getFactTable.ExecuteReader();
                 while (reader.Read())
                 {
-                    Decimal Sales = Convert.ToDecimal(reader["Sales"]);
-                    Int32 Quantity = Convert.ToInt32(reader["Quantity"]);
-                    Decimal Profit = Convert.ToDecimal(reader["Profit"]);
-                    Decimal Discount = Convert.ToDecimal(reader["Discount"]);
-
-                    Int32 ProductID = GetProductId(reader["Reference"].ToString());
-                    Int32 TimeID = GetDateId(reader["Order Date"].ToString());
+                    FactTable.Add(reader[1].ToString());
+                    FactTable.Add(reader[2].ToString());
+                    FactTable.Add(reader[3].ToString());
+                    FactTable.Add(reader[4].ToString());
+                    FactTable.Add(reader[5].ToString());
+                    FactTable.Add(reader[0].ToString());
+                    // Get The Numeric Value
+                    Decimal Sales = Convert.ToDecimal(reader[2]);
+                    Int32 Quantity = Convert.ToInt32(reader[3]);
+                    Decimal Profit = Convert.ToDecimal(reader[4]);
+                    Decimal Discount = Convert.ToDecimal(reader[5]);
+                    // Dimension ID
+                    Int32 ProductID = GetProductId(reader[0].ToString());
+                    Int32 TimeID = GetDateId(reader[1].ToString());
                     
 
-                    Decimal Value = Sales / Quantity;
-
-                    insertFactTable(ProductID, TimeID, Sales, Value, Discount, Profit, Quantity);
+                    insertFactTable(ProductID, TimeID, Sales, Discount, Profit, Quantity);
                 }
                 // Close Connection
                 connection.Close();
@@ -649,43 +653,51 @@ namespace BI_coursework
                 // Open Connection
                 connection.Open();
                 OleDbDataReader reader = null;
-                OleDbCommand getDates = new OleDbCommand("SELECT ID, [Row ID], [Order ID], [Order Date], [Ship Date], " +
-                " [Ship Mode], [Product ID], Category, [Sub-Category], [ProductName], Sales, Quantity, Profit, Discount FROM [Student Sample 2 - Sheet1]", connection);
+                OleDbCommand getFactTable = new OleDbCommand("SELECT [Order Date], Reference, Sales, Quantity, Profit, Discount FROM [Student Sample 2 - Sheet1]", connection);
 
-                reader = getDates.ExecuteReader();
+                reader = getFactTable.ExecuteReader();
                 while (reader.Read())
                 {
-                    Decimal Sales = Convert.ToDecimal(reader["Sales"]);
-                    Int32 Quantity = Convert.ToInt32(reader["Quantity"]);
-                    Decimal Profit = Convert.ToDecimal(reader["Profit"]);
-                    Decimal Discount = Convert.ToDecimal(reader["Discount"]);
-                    Int32 ProductID = GetProductId(reader["Reference"].ToString());
-                    Int32 TimeID = GetDateId(reader["Order Date"].ToString());
+                    FactTable.Add(reader[1].ToString());
+                    FactTable.Add(reader[2].ToString());
+                    FactTable.Add(reader[3].ToString());
+                    FactTable.Add(reader[4].ToString());
+                    FactTable.Add(reader[5].ToString());
+                    FactTable.Add(reader[0].ToString());
+                    // Get The Numeric Value
+                    Decimal Sales = Convert.ToDecimal(reader[2]);
+                    Int32 Quantity = Convert.ToInt32(reader[3]);
+                    Decimal Profit = Convert.ToDecimal(reader[4]);
+                    Decimal Discount = Convert.ToDecimal(reader[5]);
+                    // Dimension ID
+                    Int32 ProductID = GetProductId(reader[0].ToString());
+                    Int32 TimeID = GetDateId(reader[1].ToString());
 
-                    Decimal Value = Sales / Quantity;
 
-                    insertFactTable(ProductID, TimeID, Sales, Value, Discount, Profit, Quantity);
+
+                    insertFactTable(ProductID, TimeID, Sales, Discount, Profit, Quantity);
                 }
                 // Close Connection
                 connection.Close();
+                lstGetFromFactTable.DataSource = FactTable;
             }
-            // Bind
-            lstGetFromFactTable.DataSource = FactTable;
         
         }
 
-            private void  insertFactTable(Int32 ProductID, Int32 TimeID, Decimal Sales, Decimal Value, Decimal Discount, Decimal Profit, Int32 Quantity)
+            private void  insertFactTable(Int32 ProductID, Int32 TimeID, Decimal Sales, Decimal Discount, Decimal Profit, Int32 Quantity)
             {
-                // Create A MDF Connection
-                string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
+
+            // Create A MDF Connection
+            string connectionStringDestination = Properties.Settings.Default.DestinationDatabaseConnectionString;
 
             using (SqlConnection myConnection = new SqlConnection(connectionStringDestination))
             {
                 // Open Connection
                 myConnection.Open();
                 // SQl Command
-                SqlCommand command = new SqlCommand("SELECT ProductID FROM FactTable1 WHERE Value = @Value", myConnection);
-                command.Parameters.Add(new SqlParameter("Value", Value));
+                SqlCommand command = new SqlCommand("SELECT ProductID, TimeID FROM FactTable1 WHERE ProductID = @ProductID AND TimeID = @TimeID", myConnection);
+                command.Parameters.Add(new SqlParameter("ProductID", ProductID));
+                command.Parameters.Add(new SqlParameter("TimeID", TimeID));
 
                 // Create A Variable 
                 Boolean exists = false;
@@ -702,22 +714,23 @@ namespace BI_coursework
                 }
                 if (exists == false)
                 {
-                    SqlCommand insertCommand = new SqlCommand("INSERT INTO FactTable1 (ProductID, TimeID, Sales, Value, Discount, Profit, Quantity)" +
-                    " VALUES (@ProductID, @TimeID, @Sales, @Value, @Discount, @Profit, @Quantity)", myConnection);
+                    SqlCommand insertCommand = new SqlCommand("INSERT INTO FactTable1 (ProductID, TimeID, Sales, Discount, Profit, Quantity)" +
+                    " VALUES (@ProductID, @TimeID, @Sales, @Discount, @Profit, @Quantity)", myConnection);
                     insertCommand.Parameters.Add(new SqlParameter("ProductID", ProductID));
                     insertCommand.Parameters.Add(new SqlParameter("TimeID", TimeID));
                     insertCommand.Parameters.Add(new SqlParameter("Sales", Sales));
-                    insertCommand.Parameters.Add(new SqlParameter("Value", Value));
                     insertCommand.Parameters.Add(new SqlParameter("Discount", Discount));
                     insertCommand.Parameters.Add(new SqlParameter("Profit", Profit));
                     insertCommand.Parameters.Add(new SqlParameter("Quantity", Quantity));
 
                     // Insert The Line
                     int recordsAffected = insertCommand.ExecuteNonQuery();
+                    Console.WriteLine("FactTable: " + recordsAffected);
 
                 }
+               
             }
-          }
+        }
 
         private void btnLoadData_Click(object sender, EventArgs e)
         {
@@ -771,19 +784,14 @@ namespace BI_coursework
             // End Of Loop
 
             // Column Chart
-            chtColumn.DataSource = salesCount;
-            chtColumn.Series[0].XValueMember = "Key";
-            chtColumn.Series[0].YValueMembers = "Value";
-            chtColumn.DataBind();
-
-        }
-
-        private void btnGetFromFactTable_Click(object sender, EventArgs e)
-        {
+            chtLine.DataSource = salesCount;
+            chtLine.Series[0].XValueMember = "Key";
+            chtLine.Series[0].YValueMembers = "Value";
+            chtLine.DataBind();
 
         }
     }
-    }
+  }
 
 
 
